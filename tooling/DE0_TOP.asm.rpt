@@ -1,5 +1,5 @@
 Assembler report for DE0_TOP
-Sun Jan 15 12:19:51 2023
+Thu Jan 19 13:44:45 2023
 Quartus II 32-bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -10,7 +10,7 @@ Quartus II 32-bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edit
   2. Assembler Summary
   3. Assembler Settings
   4. Assembler Generated Files
-  5. Assembler Device Options: C:/Users/admin/Desktop/Projekat-domaci/Projekat/tooling/DE0_TOP.sof
+  5. Assembler Device Options: C:/Users/admin/Downloads/VLSI-P2-keyboard-main/VLSI-P2-keyboard-main/tooling/DE0_TOP.sof
   6. Assembler Messages
 
 
@@ -37,7 +37,7 @@ applicable agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Sun Jan 15 12:19:51 2023 ;
+; Assembler Status      ; Successful - Thu Jan 19 13:44:45 2023 ;
 ; Revision Name         ; DE0_TOP                               ;
 ; Top-level Entity Name ; DE0_TOP                               ;
 ; Family                ; Cyclone III                           ;
@@ -77,24 +77,24 @@ applicable agreement for further details.
 +-----------------------------------------------------------------------------+----------+---------------+
 
 
-+---------------------------------------------------------------------+
-; Assembler Generated Files                                           ;
-+---------------------------------------------------------------------+
-; File Name                                                           ;
-+---------------------------------------------------------------------+
-; C:/Users/admin/Desktop/Projekat-domaci/Projekat/tooling/DE0_TOP.sof ;
-+---------------------------------------------------------------------+
++------------------------------------------------------------------------------------------+
+; Assembler Generated Files                                                                ;
++------------------------------------------------------------------------------------------+
+; File Name                                                                                ;
++------------------------------------------------------------------------------------------+
+; C:/Users/admin/Downloads/VLSI-P2-keyboard-main/VLSI-P2-keyboard-main/tooling/DE0_TOP.sof ;
++------------------------------------------------------------------------------------------+
 
 
-+-----------------------------------------------------------------------------------------------+
-; Assembler Device Options: C:/Users/admin/Desktop/Projekat-domaci/Projekat/tooling/DE0_TOP.sof ;
-+----------------+------------------------------------------------------------------------------+
-; Option         ; Setting                                                                      ;
-+----------------+------------------------------------------------------------------------------+
-; Device         ; EP3C16F484C6                                                                 ;
-; JTAG usercode  ; 0x000DA8B8                                                                   ;
-; Checksum       ; 0x000DA8B8                                                                   ;
-+----------------+------------------------------------------------------------------------------+
++--------------------------------------------------------------------------------------------------------------------+
+; Assembler Device Options: C:/Users/admin/Downloads/VLSI-P2-keyboard-main/VLSI-P2-keyboard-main/tooling/DE0_TOP.sof ;
++----------------+---------------------------------------------------------------------------------------------------+
+; Option         ; Setting                                                                                           ;
++----------------+---------------------------------------------------------------------------------------------------+
+; Device         ; EP3C16F484C6                                                                                      ;
+; JTAG usercode  ; 0x000EBBD4                                                                                        ;
+; Checksum       ; 0x000EBBD4                                                                                        ;
++----------------+---------------------------------------------------------------------------------------------------+
 
 
 +--------------------+
@@ -116,14 +116,14 @@ Info: Running Quartus II 32-bit Assembler
     Info: programming logic devices manufactured by Altera and sold by 
     Info: Altera or its authorized distributors.  Please refer to the 
     Info: applicable agreement for further details.
-    Info: Processing started: Sun Jan 15 12:19:48 2023
+    Info: Processing started: Thu Jan 19 13:44:41 2023
 Info: Command: quartus_asm DE0_TOP
 Info (115031): Writing out detailed assembly data for power analysis
 Info (115030): Assembler is generating device programming files
 Info: Quartus II 32-bit Assembler was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 358 megabytes
-    Info: Processing ended: Sun Jan 15 12:19:51 2023
-    Info: Elapsed time: 00:00:03
-    Info: Total CPU time (on all processors): 00:00:03
+    Info: Peak virtual memory: 354 megabytes
+    Info: Processing ended: Thu Jan 19 13:44:45 2023
+    Info: Elapsed time: 00:00:04
+    Info: Total CPU time (on all processors): 00:00:04
 
 

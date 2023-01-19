@@ -11,6 +11,18 @@
 -- programming logic devices manufactured by Altera and sold by 
 -- Altera or its authorized distributors.  Please refer to the 
 -- applicable agreement for further details.
+--C1_cnt_reg[1] is ps2:inst|cnt_reg[1] at FF_X24_Y26_N5
+--register power-up is low
+
+C1_cnt_reg[1] = DFFEAS(C1L2, A1L11, A1L598,  , C1L55,  ,  , !C1_state_reg,  );
+
+
+--C1_cnt_reg[2] is ps2:inst|cnt_reg[2] at FF_X24_Y26_N27
+--register power-up is low
+
+C1_cnt_reg[2] = DFFEAS(C1L3, A1L11, A1L598,  , C1L55,  ,  , !C1_state_reg,  );
+
+
 --A1L55 is DRAM_DQ[0]~output at IOOBUF_X16_Y29_N2
 A1L55 = OUTPUT_BUFFER.O(.I(VCC), , , , , , , , , , , , , , , , , );
 
@@ -455,396 +467,766 @@ A1L558 = OUTPUT_BUFFER.O(.I(VCC), , , , , , , , , , , , , , , , , );
 A1L555 = OUTPUT_BUFFER.O(.I(VCC), , , , , , , , , , , , , , , , , );
 
 
---E1L1 is ps2:inst|hex:hex_inst|Equal0~0 at LCCOMB_X36_Y16_N12
-E1L1 = (!C1_hex_code[7] & (!C1_hex_code[6] & (!C1_hex_code[1] & !C1_hex_code[8])));
+--E1L12 is ps2:inst|hex:hex_inst|WideOr6~0 at LCCOMB_X22_Y26_N28
+E1L12 = (C1_hex_code[3] & (C1_hex_code[0] & (C1_hex_code[2] $ (C1_hex_code[1])))) # (!C1_hex_code[3] & (!C1_hex_code[1] & (C1_hex_code[2] $ (C1_hex_code[0]))));
 
 
---E1L2 is ps2:inst|hex:hex_inst|Equal0~1 at LCCOMB_X40_Y16_N0
-E1L2 = (!C1_hex_code[9] & (!C1_hex_code[10] & (!C1_hex_code[11] & !C1_hex_code[5])));
+--E1L11 is ps2:inst|hex:hex_inst|WideOr5~0 at LCCOMB_X22_Y26_N14
+E1L11 = (C1_hex_code[3] & ((C1_hex_code[0] & ((C1_hex_code[1]))) # (!C1_hex_code[0] & (C1_hex_code[2])))) # (!C1_hex_code[3] & (C1_hex_code[2] & (C1_hex_code[1] $ (C1_hex_code[0]))));
 
 
---E1L3 is ps2:inst|hex:hex_inst|Equal0~2 at LCCOMB_X40_Y16_N26
-E1L3 = (C1_hex_code[4] & (C1_hex_code[2] & (C1_hex_code[0] & C1_hex_code[3])));
+--E1L10 is ps2:inst|hex:hex_inst|WideOr4~0 at LCCOMB_X22_Y26_N8
+E1L10 = (C1_hex_code[3] & (C1_hex_code[2] & ((C1_hex_code[1]) # (!C1_hex_code[0])))) # (!C1_hex_code[3] & (!C1_hex_code[2] & (C1_hex_code[1] & !C1_hex_code[0])));
 
 
---E1L4 is ps2:inst|hex:hex_inst|Equal0~3 at LCCOMB_X36_Y16_N22
-E1L4 = (!C1_hex_code[15] & (!C1_hex_code[14] & (!C1_hex_code[13] & !C1_hex_code[12])));
+--E1L9 is ps2:inst|hex:hex_inst|WideOr3~0 at LCCOMB_X24_Y26_N28
+E1L9 = (C1_hex_code[1] & ((C1_hex_code[0] & (C1_hex_code[2])) # (!C1_hex_code[0] & (!C1_hex_code[2] & C1_hex_code[3])))) # (!C1_hex_code[1] & (!C1_hex_code[3] & (C1_hex_code[0] $ (C1_hex_code[2]))));
 
 
---E1L5 is ps2:inst|hex:hex_inst|Equal0~4 at LCCOMB_X36_Y16_N4
-E1L5 = (E1L4 & (E1L1 & (E1L3 & E1L2)));
+--E1L8 is ps2:inst|hex:hex_inst|WideOr2~0 at LCCOMB_X22_Y26_N6
+E1L8 = (C1_hex_code[1] & (!C1_hex_code[3] & ((C1_hex_code[0])))) # (!C1_hex_code[1] & ((C1_hex_code[2] & (!C1_hex_code[3])) # (!C1_hex_code[2] & ((C1_hex_code[0])))));
 
 
---E1L8 is ps2:inst|hex:hex_inst|Equal2~0 at LCCOMB_X40_Y16_N10
-E1L8 = (!C1_hex_code[4] & (!C1_hex_code[2] & (!C1_hex_code[0] & !C1_hex_code[3])));
+--E1L7 is ps2:inst|hex:hex_inst|WideOr1~0 at LCCOMB_X24_Y26_N6
+E1L7 = (C1_hex_code[0] & (C1_hex_code[3] $ (((C1_hex_code[1]) # (!C1_hex_code[2]))))) # (!C1_hex_code[0] & (C1_hex_code[1] & (!C1_hex_code[2] & !C1_hex_code[3])));
 
 
---E1L9 is ps2:inst|hex:hex_inst|Equal2~1 at LCCOMB_X36_Y16_N14
-E1L9 = (E1L2 & (E1L8 & (E1L4 & E1L1)));
+--E1L6 is ps2:inst|hex:hex_inst|WideOr0~0 at LCCOMB_X24_Y26_N12
+E1L6 = (C1_hex_code[0] & ((C1_hex_code[3]) # (C1_hex_code[1] $ (C1_hex_code[2])))) # (!C1_hex_code[0] & ((C1_hex_code[1]) # (C1_hex_code[2] $ (C1_hex_code[3]))));
 
 
---E1L11 is ps2:inst|hex:hex_inst|WideNor0~0 at LCCOMB_X28_Y28_N24
-E1L11 = (!E1L9 & !E1L5);
+--E1L19 is ps2:inst|hex:hex_inst|WideOr13~0 at LCCOMB_X29_Y26_N16
+E1L19 = (C1_hex_code[6] & (!C1_hex_code[5] & (C1_hex_code[7] $ (!C1_hex_code[4])))) # (!C1_hex_code[6] & (C1_hex_code[4] & (C1_hex_code[5] $ (!C1_hex_code[7]))));
 
 
---E1L6 is ps2:inst|hex:hex_inst|Equal1~0 at LCCOMB_X36_Y16_N0
-E1L6 = (C1_hex_code[15] & (C1_hex_code[14] & (C1_hex_code[13] & C1_hex_code[12])));
+--E1L18 is ps2:inst|hex:hex_inst|WideOr12~0 at LCCOMB_X29_Y26_N6
+E1L18 = (C1_hex_code[5] & ((C1_hex_code[4] & ((C1_hex_code[7]))) # (!C1_hex_code[4] & (C1_hex_code[6])))) # (!C1_hex_code[5] & (C1_hex_code[6] & (C1_hex_code[7] $ (C1_hex_code[4]))));
 
 
---E1L7 is ps2:inst|hex:hex_inst|Equal1~1 at LCCOMB_X36_Y16_N2
-E1L7 = (E1L1 & (E1L6 & (E1L3 & E1L2)));
+--E1L17 is ps2:inst|hex:hex_inst|WideOr11~0 at LCCOMB_X29_Y26_N24
+E1L17 = (C1_hex_code[6] & (C1_hex_code[7] & ((C1_hex_code[5]) # (!C1_hex_code[4])))) # (!C1_hex_code[6] & (C1_hex_code[5] & (!C1_hex_code[7] & !C1_hex_code[4])));
 
 
---E1L12 is ps2:inst|hex:hex_inst|out~0 at LCCOMB_X28_Y28_N22
-E1L12 = (E1L5) # ((!E1L9 & !E1L7));
+--E1L16 is ps2:inst|hex:hex_inst|WideOr10~0 at LCCOMB_X29_Y26_N30
+E1L16 = (C1_hex_code[5] & ((C1_hex_code[6] & ((C1_hex_code[4]))) # (!C1_hex_code[6] & (C1_hex_code[7] & !C1_hex_code[4])))) # (!C1_hex_code[5] & (!C1_hex_code[7] & (C1_hex_code[6] $ (C1_hex_code[4]))));
 
 
---E1_WideNor0 is ps2:inst|hex:hex_inst|WideNor0 at LCCOMB_X28_Y28_N20
-E1_WideNor0 = (E1L9) # ((E1L7) # (E1L5));
+--E1L15 is ps2:inst|hex:hex_inst|WideOr9~0 at LCCOMB_X29_Y26_N0
+E1L15 = (C1_hex_code[5] & (((!C1_hex_code[7] & C1_hex_code[4])))) # (!C1_hex_code[5] & ((C1_hex_code[6] & (!C1_hex_code[7])) # (!C1_hex_code[6] & ((C1_hex_code[4])))));
 
 
---C1_buffer_reg[3] is ps2:inst|buffer_reg[3] at FF_X40_Y16_N29
+--E1L14 is ps2:inst|hex:hex_inst|WideOr8~0 at LCCOMB_X29_Y26_N2
+E1L14 = (C1_hex_code[5] & (!C1_hex_code[7] & ((C1_hex_code[4]) # (!C1_hex_code[6])))) # (!C1_hex_code[5] & (C1_hex_code[4] & (C1_hex_code[6] $ (!C1_hex_code[7]))));
+
+
+--E1L13 is ps2:inst|hex:hex_inst|WideOr7~0 at LCCOMB_X29_Y26_N12
+E1L13 = (C1_hex_code[4] & ((C1_hex_code[7]) # (C1_hex_code[5] $ (C1_hex_code[6])))) # (!C1_hex_code[4] & ((C1_hex_code[5]) # (C1_hex_code[6] $ (C1_hex_code[7]))));
+
+
+--E1L32 is ps2:inst|hex:hex_inst|WideOr20~0 at LCCOMB_X30_Y27_N28
+E1L32 = (C1_hex_code[10] & (!C1_hex_code[9] & (C1_hex_code[11] $ (!C1_hex_code[8])))) # (!C1_hex_code[10] & (C1_hex_code[8] & (C1_hex_code[9] $ (!C1_hex_code[11]))));
+
+
+--E1L1 is ps2:inst|hex:hex_inst|Equal0~0 at LCCOMB_X24_Y26_N20
+E1L1 = (C1_hex_code[0] & (C1_hex_code[8] & (C1_hex_code[1] $ (!C1_hex_code[9])))) # (!C1_hex_code[0] & (!C1_hex_code[8] & (C1_hex_code[1] $ (!C1_hex_code[9]))));
+
+
+--E1L2 is ps2:inst|hex:hex_inst|Equal0~1 at LCCOMB_X26_Y26_N18
+E1L2 = (C1_hex_code[3] & (C1_hex_code[11] & (C1_hex_code[2] $ (!C1_hex_code[10])))) # (!C1_hex_code[3] & (!C1_hex_code[11] & (C1_hex_code[2] $ (!C1_hex_code[10]))));
+
+
+--E1L3 is ps2:inst|hex:hex_inst|Equal0~2 at LCCOMB_X28_Y27_N20
+E1L3 = (C1_hex_code[4] & (C1_hex_code[12] & (C1_hex_code[5] $ (!C1_hex_code[13])))) # (!C1_hex_code[4] & (!C1_hex_code[12] & (C1_hex_code[5] $ (!C1_hex_code[13]))));
+
+
+--E1L4 is ps2:inst|hex:hex_inst|Equal0~3 at LCCOMB_X29_Y26_N14
+E1L4 = (C1_hex_code[14] & (C1_hex_code[6] & (C1_hex_code[7] $ (!C1_hex_code[15])))) # (!C1_hex_code[14] & (!C1_hex_code[6] & (C1_hex_code[7] $ (!C1_hex_code[15]))));
+
+
+--E1L5 is ps2:inst|hex:hex_inst|Equal0~4 at LCCOMB_X28_Y27_N10
+E1L5 = (E1L2 & (E1L3 & (E1L1 & E1L4)));
+
+
+--E1L33 is ps2:inst|hex:hex_inst|WideOr20~1 at LCCOMB_X30_Y27_N6
+E1L33 = (E1L5) # (E1L32);
+
+
+--E1L30 is ps2:inst|hex:hex_inst|WideOr19~0 at LCCOMB_X30_Y27_N12
+E1L30 = (C1_hex_code[9] & ((C1_hex_code[8] & ((C1_hex_code[11]))) # (!C1_hex_code[8] & (C1_hex_code[10])))) # (!C1_hex_code[9] & (C1_hex_code[10] & (C1_hex_code[11] $ (C1_hex_code[8]))));
+
+
+--E1L31 is ps2:inst|hex:hex_inst|WideOr19~1 at LCCOMB_X30_Y27_N18
+E1L31 = (E1L5) # (E1L30);
+
+
+--E1L28 is ps2:inst|hex:hex_inst|WideOr18~0 at LCCOMB_X30_Y27_N16
+E1L28 = (C1_hex_code[10] & (C1_hex_code[11] & ((C1_hex_code[9]) # (!C1_hex_code[8])))) # (!C1_hex_code[10] & (C1_hex_code[9] & (!C1_hex_code[11] & !C1_hex_code[8])));
+
+
+--E1L29 is ps2:inst|hex:hex_inst|WideOr18~1 at LCCOMB_X29_Y27_N0
+E1L29 = (E1L5) # (E1L28);
+
+
+--E1L26 is ps2:inst|hex:hex_inst|WideOr17~0 at LCCOMB_X30_Y27_N2
+E1L26 = (C1_hex_code[9] & ((C1_hex_code[10] & ((C1_hex_code[8]))) # (!C1_hex_code[10] & (C1_hex_code[11] & !C1_hex_code[8])))) # (!C1_hex_code[9] & (!C1_hex_code[11] & (C1_hex_code[10] $ (C1_hex_code[8]))));
+
+
+--E1L27 is ps2:inst|hex:hex_inst|WideOr17~1 at LCCOMB_X30_Y27_N8
+E1L27 = (E1L5) # (E1L26);
+
+
+--E1L24 is ps2:inst|hex:hex_inst|WideOr16~0 at LCCOMB_X30_Y27_N22
+E1L24 = (C1_hex_code[9] & (((!C1_hex_code[11] & C1_hex_code[8])))) # (!C1_hex_code[9] & ((C1_hex_code[10] & (!C1_hex_code[11])) # (!C1_hex_code[10] & ((C1_hex_code[8])))));
+
+
+--E1L25 is ps2:inst|hex:hex_inst|WideOr16~1 at LCCOMB_X30_Y27_N4
+E1L25 = (E1L24) # (E1L5);
+
+
+--E1L22 is ps2:inst|hex:hex_inst|WideOr15~0 at LCCOMB_X30_Y27_N26
+E1L22 = (C1_hex_code[9] & (!C1_hex_code[11] & ((C1_hex_code[8]) # (!C1_hex_code[10])))) # (!C1_hex_code[9] & (C1_hex_code[8] & (C1_hex_code[10] $ (!C1_hex_code[11]))));
+
+
+--E1L23 is ps2:inst|hex:hex_inst|WideOr15~1 at LCCOMB_X30_Y27_N24
+E1L23 = (E1L22) # (E1L5);
+
+
+--E1L20 is ps2:inst|hex:hex_inst|WideOr14~0 at LCCOMB_X30_Y27_N10
+E1L20 = (C1_hex_code[8] & ((C1_hex_code[11]) # (C1_hex_code[9] $ (C1_hex_code[10])))) # (!C1_hex_code[8] & ((C1_hex_code[9]) # (C1_hex_code[10] $ (C1_hex_code[11]))));
+
+
+--E1L21 is ps2:inst|hex:hex_inst|WideOr14~1 at LCCOMB_X30_Y27_N0
+E1L21 = (E1L5) # (!E1L20);
+
+
+--E1L46 is ps2:inst|hex:hex_inst|WideOr27~0 at LCCOMB_X28_Y27_N4
+E1L46 = (C1_hex_code[14] & (!C1_hex_code[13] & (C1_hex_code[12] $ (!C1_hex_code[15])))) # (!C1_hex_code[14] & (C1_hex_code[12] & (C1_hex_code[15] $ (!C1_hex_code[13]))));
+
+
+--E1L47 is ps2:inst|hex:hex_inst|WideOr27~1 at LCCOMB_X28_Y27_N22
+E1L47 = (E1L46) # (E1L5);
+
+
+--E1L44 is ps2:inst|hex:hex_inst|WideOr26~0 at LCCOMB_X28_Y27_N12
+E1L44 = (C1_hex_code[15] & ((C1_hex_code[12] & ((C1_hex_code[13]))) # (!C1_hex_code[12] & (C1_hex_code[14])))) # (!C1_hex_code[15] & (C1_hex_code[14] & (C1_hex_code[12] $ (C1_hex_code[13]))));
+
+
+--E1L45 is ps2:inst|hex:hex_inst|WideOr26~1 at LCCOMB_X29_Y27_N26
+E1L45 = (E1L44) # (E1L5);
+
+
+--E1L42 is ps2:inst|hex:hex_inst|WideOr25~0 at LCCOMB_X28_Y27_N2
+E1L42 = (C1_hex_code[14] & (C1_hex_code[15] & ((C1_hex_code[13]) # (!C1_hex_code[12])))) # (!C1_hex_code[14] & (!C1_hex_code[12] & (!C1_hex_code[15] & C1_hex_code[13])));
+
+
+--E1L43 is ps2:inst|hex:hex_inst|WideOr25~1 at LCCOMB_X29_Y27_N12
+E1L43 = (E1L42) # (E1L5);
+
+
+--E1L40 is ps2:inst|hex:hex_inst|WideOr24~0 at LCCOMB_X28_Y27_N28
+E1L40 = (C1_hex_code[13] & ((C1_hex_code[14] & (C1_hex_code[12])) # (!C1_hex_code[14] & (!C1_hex_code[12] & C1_hex_code[15])))) # (!C1_hex_code[13] & (!C1_hex_code[15] & (C1_hex_code[14] $ (C1_hex_code[12]))));
+
+
+--E1L41 is ps2:inst|hex:hex_inst|WideOr24~1 at LCCOMB_X30_Y27_N14
+E1L41 = (E1L5) # (E1L40);
+
+
+--E1L38 is ps2:inst|hex:hex_inst|WideOr23~0 at LCCOMB_X28_Y27_N6
+E1L38 = (C1_hex_code[13] & (((C1_hex_code[12] & !C1_hex_code[15])))) # (!C1_hex_code[13] & ((C1_hex_code[14] & ((!C1_hex_code[15]))) # (!C1_hex_code[14] & (C1_hex_code[12]))));
+
+
+--E1L39 is ps2:inst|hex:hex_inst|WideOr23~1 at LCCOMB_X29_Y27_N6
+E1L39 = (E1L38) # (E1L5);
+
+
+--E1L36 is ps2:inst|hex:hex_inst|WideOr22~0 at LCCOMB_X28_Y27_N0
+E1L36 = (C1_hex_code[14] & (C1_hex_code[12] & (C1_hex_code[15] $ (C1_hex_code[13])))) # (!C1_hex_code[14] & (!C1_hex_code[15] & ((C1_hex_code[12]) # (C1_hex_code[13]))));
+
+
+--E1L37 is ps2:inst|hex:hex_inst|WideOr22~1 at LCCOMB_X29_Y27_N8
+E1L37 = (E1L36) # (E1L5);
+
+
+--E1L34 is ps2:inst|hex:hex_inst|WideOr21~0 at LCCOMB_X28_Y27_N26
+E1L34 = (C1_hex_code[12] & ((C1_hex_code[15]) # (C1_hex_code[14] $ (C1_hex_code[13])))) # (!C1_hex_code[12] & ((C1_hex_code[13]) # (C1_hex_code[14] $ (C1_hex_code[15]))));
+
+
+--E1L35 is ps2:inst|hex:hex_inst|WideOr21~1 at LCCOMB_X29_Y27_N22
+E1L35 = (E1L5) # (!E1L34);
+
+
+--C1_buffer_reg[0] is ps2:inst|buffer_reg[0] at FF_X27_Y26_N19
 --register power-up is low
 
-C1_buffer_reg[3] = DFFEAS(C1L22, GLOBAL(A1L12), A1L598,  , C1_state_reg,  ,  ,  ,  );
+C1_buffer_reg[0] = DFFEAS(C1L29, A1L11, A1L598,  , C1_state_reg,  ,  ,  ,  );
 
 
---C1_cnt_reg[1] is ps2:inst|cnt_reg[1] at FF_X39_Y16_N1
+--C1_cnt_reg[0] is ps2:inst|cnt_reg[0] at FF_X24_Y26_N9
 --register power-up is low
 
-C1_cnt_reg[1] = DFFEAS( , A1L11, A1L598,  , C1_neg_edge, C1L32,  ,  , VCC);
+C1_cnt_reg[0] = DFFEAS(C1L50, A1L11, A1L598,  , C1L55,  ,  ,  ,  );
 
 
---C1_ps2clk_reg is ps2:inst|ps2clk_reg at FF_X38_Y16_N19
+--C1L4 is ps2:inst|Decoder0~0 at LCCOMB_X24_Y26_N18
+C1L4 = (!C1_cnt_reg[2] & (!C1_cnt_reg[1] & C1_cnt_reg[0]));
+
+
+--C1_ps2clk_reg is ps2:inst|ps2clk_reg at FF_X23_Y26_N11
 --register power-up is low
 
-C1_ps2clk_reg = DFFEAS( , GLOBAL(A1L12), A1L598,  ,  , D1_out_reg,  ,  , VCC);
+C1_ps2clk_reg = DFFEAS(C1L126, A1L11, A1L598,  ,  ,  ,  ,  ,  );
 
 
---D1_out_reg is ps2:inst|deb:deb_inst|out_reg at FF_X38_Y16_N3
+--C1_cnt_reg[3] is ps2:inst|cnt_reg[3] at FF_X23_Y26_N5
 --register power-up is low
 
-D1_out_reg = DFFEAS(D1L15, A1L11, A1L598,  ,  ,  ,  ,  ,  );
+C1_cnt_reg[3] = DFFEAS(C1L51, A1L11, A1L598,  , C1L55,  ,  ,  ,  );
 
 
---C1_cnt_reg[3] is ps2:inst|cnt_reg[3] at FF_X39_Y16_N31
+--D1_out_reg is ps2:inst|deb:deb_inst|out_reg at FF_X23_Y26_N29
 --register power-up is low
 
-C1_cnt_reg[3] = DFFEAS(C1L34, A1L11, A1L598,  , C1_neg_edge,  ,  ,  ,  );
+D1_out_reg = DFFEAS(D1L18, A1L11, A1L598,  ,  ,  ,  ,  ,  );
 
 
---C1L1 is ps2:inst|Decoder0~0 at LCCOMB_X39_Y16_N16
-C1L1 = (!D1_out_reg & (C1_ps2clk_reg & (!C1_cnt_reg[3] & C1_cnt_reg[1])));
+--C1L5 is ps2:inst|Decoder0~1 at LCCOMB_X23_Y26_N6
+C1L5 = (C1_ps2clk_reg & (C1_cnt_reg[3] & !D1_out_reg));
 
 
---C1_cnt_reg[0] is ps2:inst|cnt_reg[0] at FF_X39_Y16_N15
+--C1L29 is ps2:inst|buffer_next~0 at LCCOMB_X27_Y26_N18
+C1L29 = (C1L5 & ((C1L4 & ((A1L557))) # (!C1L4 & (C1_buffer_reg[0])))) # (!C1L5 & (((C1_buffer_reg[0]))));
+
+
+--C1_buffer_reg[7] is ps2:inst|buffer_reg[7] at FF_X26_Y26_N5
 --register power-up is low
 
-C1_cnt_reg[0] = DFFEAS( , GLOBAL(A1L12), A1L598,  , C1_neg_edge, C1L31,  ,  , VCC);
+C1_buffer_reg[7] = DFFEAS( , A1L11, A1L598,  , C1_state_reg, C1L30,  ,  , VCC);
 
 
---C1_cnt_reg[2] is ps2:inst|cnt_reg[2] at FF_X39_Y16_N23
+--C1L6 is ps2:inst|Decoder0~2 at LCCOMB_X23_Y26_N24
+C1L6 = (C1_ps2clk_reg & (!D1_out_reg & (!C1_cnt_reg[3] & C1_cnt_reg[1])));
+
+
+--C1L7 is ps2:inst|Decoder0~3 at LCCOMB_X26_Y26_N12
+C1L7 = (!C1_cnt_reg[2] & (!C1_cnt_reg[0] & C1L6));
+
+
+--C1L30 is ps2:inst|buffer_next~1 at LCCOMB_X26_Y26_N22
+C1L30 = (C1L7 & ((A1L557))) # (!C1L7 & (C1_buffer_reg[7]));
+
+
+--C1_buffer_reg[6] is ps2:inst|buffer_reg[6] at FF_X27_Y26_N5
 --register power-up is low
 
-C1_cnt_reg[2] = DFFEAS( , A1L11, A1L598,  , C1_neg_edge, C1L33,  ,  , VCC);
+C1_buffer_reg[6] = DFFEAS(C1L31, A1L11, A1L598,  , C1_state_reg,  ,  ,  ,  );
 
 
---C1L2 is ps2:inst|Decoder0~1 at LCCOMB_X38_Y16_N24
-C1L2 = (C1_cnt_reg[0] & !C1_cnt_reg[2]);
+--C1L8 is ps2:inst|Decoder0~4 at LCCOMB_X24_Y26_N2
+C1L8 = (C1_cnt_reg[0] & !C1_cnt_reg[2]);
 
 
---C1L9 is ps2:inst|buffer_next~0 at LCCOMB_X39_Y16_N18
-C1L9 = (C1L1 & ((C1L2 & (A1L557)) # (!C1L2 & ((C1_buffer_reg[3]))))) # (!C1L1 & (((C1_buffer_reg[3]))));
+--C1L31 is ps2:inst|buffer_next~2 at LCCOMB_X27_Y26_N4
+C1L31 = (C1L8 & ((C1L6 & ((A1L557))) # (!C1L6 & (C1_buffer_reg[6])))) # (!C1L8 & (((C1_buffer_reg[6]))));
 
 
---C1_state_reg is ps2:inst|state_reg at FF_X38_Y16_N9
+--C1_buffer_reg[9] is ps2:inst|buffer_reg[9] at FF_X26_Y26_N1
 --register power-up is low
 
-C1_state_reg = DFFEAS(C1L73, A1L11, A1L598,  ,  ,  ,  ,  ,  );
+C1_buffer_reg[9] = DFFEAS(C1L32, A1L11, A1L598,  , C1_state_reg,  ,  ,  ,  );
 
 
---C1L46 is ps2:inst|hex_code[4]~0 at LCCOMB_X39_Y16_N14
-C1L46 = (!C1_cnt_reg[2] & (!C1_cnt_reg[3] & (!C1_cnt_reg[0] & !C1_cnt_reg[1])));
+--C1L9 is ps2:inst|Decoder0~5 at LCCOMB_X23_Y26_N8
+C1L9 = (C1_ps2clk_reg & (!C1_cnt_reg[3] & !D1_out_reg));
 
 
---C1L47 is ps2:inst|hex_code[4]~1 at LCCOMB_X40_Y16_N30
-C1L47 = (C1_state_reg & C1L46);
+--C1L1 is ps2:inst|Add1~0 at LCCOMB_X24_Y26_N30
+C1L1 = (C1_cnt_reg[1]) # ((C1_cnt_reg[0]) # (C1_cnt_reg[2]));
 
 
---C1_buffer_reg[8] is ps2:inst|buffer_reg[8] at FF_X37_Y16_N1
+--C1L32 is ps2:inst|buffer_next~3 at LCCOMB_X26_Y26_N0
+C1L32 = (C1L1 & (((C1_buffer_reg[9])))) # (!C1L1 & ((C1L9 & (A1L557)) # (!C1L9 & ((C1_buffer_reg[9])))));
+
+
+--C1_buffer_reg[8] is ps2:inst|buffer_reg[8] at FF_X27_Y26_N7
 --register power-up is low
 
-C1_buffer_reg[8] = DFFEAS( , GLOBAL(A1L12), A1L598,  , C1_state_reg, C1L10,  ,  , VCC);
+C1_buffer_reg[8] = DFFEAS( , GLOBAL(A1L12), A1L598,  , C1_state_reg, C1L33,  ,  , VCC);
 
 
---C1_neg_edge is ps2:inst|neg_edge at LCCOMB_X38_Y16_N4
-C1_neg_edge = (C1_ps2clk_reg & !D1_out_reg);
+--C1L33 is ps2:inst|buffer_next~4 at LCCOMB_X27_Y26_N16
+C1L33 = (C1L4 & ((C1L9 & (A1L557)) # (!C1L9 & ((C1_buffer_reg[8]))))) # (!C1L4 & (((C1_buffer_reg[8]))));
 
 
---C1L3 is ps2:inst|Decoder0~2 at LCCOMB_X37_Y16_N6
-C1L3 = (!C1_cnt_reg[2] & (!C1_cnt_reg[1] & (C1_cnt_reg[3] & C1_neg_edge)));
+--C1L19 is ps2:inst|Equal2~0 at LCCOMB_X27_Y26_N6
+C1L19 = (!C1L32 & (C1L31 & (!C1L33 & !C1L29)));
 
 
---C1L10 is ps2:inst|buffer_next~1 at LCCOMB_X37_Y16_N8
-C1L10 = (C1_cnt_reg[0] & (((C1_buffer_reg[8])))) # (!C1_cnt_reg[0] & ((C1L3 & (A1L557)) # (!C1L3 & ((C1_buffer_reg[8])))));
-
-
---C1_buffer_reg[9] is ps2:inst|buffer_reg[9] at FF_X37_Y16_N19
+--C1_buffer_reg[5] is ps2:inst|buffer_reg[5] at FF_X27_Y26_N23
 --register power-up is low
 
-C1_buffer_reg[9] = DFFEAS( , GLOBAL(A1L12), A1L598,  , C1_state_reg, C1L11,  ,  , VCC);
+C1_buffer_reg[5] = DFFEAS(C1L34, A1L11, A1L598,  , C1_state_reg,  ,  ,  ,  );
 
 
---C1L11 is ps2:inst|buffer_next~2 at LCCOMB_X37_Y16_N4
-C1L11 = (C1_cnt_reg[0] & ((C1L3 & (A1L557)) # (!C1L3 & ((C1_buffer_reg[9]))))) # (!C1_cnt_reg[0] & (((C1_buffer_reg[9]))));
+--C1L10 is ps2:inst|Decoder0~6 at LCCOMB_X24_Y26_N0
+C1L10 = (!C1_cnt_reg[0] & !C1_cnt_reg[1]);
 
 
---C1_buffer_reg[7] is ps2:inst|buffer_reg[7] at FF_X37_Y16_N31
+--C1L11 is ps2:inst|Decoder0~7 at LCCOMB_X23_Y26_N16
+C1L11 = (C1_ps2clk_reg & (!D1_out_reg & (!C1_cnt_reg[3] & C1_cnt_reg[2])));
+
+
+--C1L34 is ps2:inst|buffer_next~5 at LCCOMB_X27_Y26_N22
+C1L34 = (C1L11 & ((C1L10 & ((A1L557))) # (!C1L10 & (C1_buffer_reg[5])))) # (!C1L11 & (((C1_buffer_reg[5]))));
+
+
+--C1_buffer_reg[4] is ps2:inst|buffer_reg[4] at FF_X27_Y26_N13
 --register power-up is low
 
-C1_buffer_reg[7] = DFFEAS( , GLOBAL(A1L12), A1L598,  , C1_state_reg, C1L12,  ,  , VCC);
+C1_buffer_reg[4] = DFFEAS(C1L35, A1L11, A1L598,  , C1_state_reg,  ,  ,  ,  );
 
 
---C1L4 is ps2:inst|Decoder0~3 at LCCOMB_X37_Y16_N24
-C1L4 = (!C1_cnt_reg[3] & (C1_cnt_reg[1] & (C1_cnt_reg[2] & C1_neg_edge)));
+--C1L12 is ps2:inst|Decoder0~8 at LCCOMB_X24_Y26_N24
+C1L12 = (!C1_cnt_reg[1] & C1_cnt_reg[0]);
 
 
---C1L12 is ps2:inst|buffer_next~3 at LCCOMB_X37_Y16_N14
-C1L12 = (C1_cnt_reg[0] & ((C1L4 & ((A1L557))) # (!C1L4 & (C1_buffer_reg[7])))) # (!C1_cnt_reg[0] & (C1_buffer_reg[7]));
+--C1L35 is ps2:inst|buffer_next~6 at LCCOMB_X27_Y26_N12
+C1L35 = (C1L11 & ((C1L12 & ((A1L557))) # (!C1L12 & (C1_buffer_reg[4])))) # (!C1L11 & (((C1_buffer_reg[4]))));
 
 
---C1_buffer_reg[6] is ps2:inst|buffer_reg[6] at FF_X37_Y16_N29
+--C1_buffer_reg[2] is ps2:inst|buffer_reg[2] at FF_X27_Y26_N1
 --register power-up is low
 
-C1_buffer_reg[6] = DFFEAS( , GLOBAL(A1L12), A1L598,  , C1_state_reg, C1L14,  ,  , VCC);
+C1_buffer_reg[2] = DFFEAS(C1L36, A1L11, A1L598,  , C1_state_reg,  ,  ,  ,  );
 
 
---C1L13 is ps2:inst|buffer_next~4 at LCCOMB_X39_Y16_N28
-C1L13 = (!C1_cnt_reg[3] & (!C1_cnt_reg[0] & (C1_cnt_reg[2] & C1_cnt_reg[1])));
+--C1L13 is ps2:inst|Decoder0~9 at LCCOMB_X24_Y26_N14
+C1L13 = (C1_cnt_reg[2] & C1_cnt_reg[0]);
 
 
---C1L14 is ps2:inst|buffer_next~5 at LCCOMB_X38_Y16_N0
-C1L14 = (C1_neg_edge & ((C1L13 & (A1L557)) # (!C1L13 & ((C1_buffer_reg[6]))))) # (!C1_neg_edge & (((C1_buffer_reg[6]))));
+--C1L36 is ps2:inst|buffer_next~7 at LCCOMB_X27_Y26_N0
+C1L36 = (C1L6 & ((C1L13 & ((A1L557))) # (!C1L13 & (C1_buffer_reg[2])))) # (!C1L6 & (((C1_buffer_reg[2]))));
 
 
---C1_buffer_reg[5] is ps2:inst|buffer_reg[5] at FF_X40_Y16_N19
+--C1_buffer_reg[1] is ps2:inst|buffer_reg[1] at FF_X27_Y26_N25
 --register power-up is low
 
-C1_buffer_reg[5] = DFFEAS(C1L26, GLOBAL(A1L12), A1L598,  , C1_state_reg,  ,  ,  ,  );
+C1_buffer_reg[1] = DFFEAS(C1L37, A1L11, A1L598,  , C1_state_reg,  ,  ,  ,  );
 
 
---C1L5 is ps2:inst|Decoder0~4 at LCCOMB_X39_Y16_N10
-C1L5 = (C1_cnt_reg[2] & (C1_ps2clk_reg & (!C1_cnt_reg[3] & !D1_out_reg)));
+--C1L37 is ps2:inst|buffer_next~8 at LCCOMB_X27_Y26_N24
+C1L37 = (C1L1 & (((C1_buffer_reg[1])))) # (!C1L1 & ((C1L5 & ((A1L557))) # (!C1L5 & (C1_buffer_reg[1]))));
 
 
---C1L6 is ps2:inst|Decoder0~5 at LCCOMB_X39_Y16_N12
-C1L6 = (C1_cnt_reg[0] & !C1_cnt_reg[1]);
+--C1L20 is ps2:inst|Equal2~1 at LCCOMB_X27_Y26_N2
+C1L20 = (!C1L35 & (!C1L37 & (C1L34 & !C1L36)));
 
 
---C1L15 is ps2:inst|buffer_next~6 at LCCOMB_X39_Y16_N4
-C1L15 = (C1L5 & ((C1L6 & (A1L557)) # (!C1L6 & ((C1_buffer_reg[5]))))) # (!C1L5 & (((C1_buffer_reg[5]))));
-
-
---C1_buffer_reg[4] is ps2:inst|buffer_reg[4] at FF_X40_Y16_N17
+--C1_buffer_reg[3] is ps2:inst|buffer_reg[3] at FF_X26_Y26_N15
 --register power-up is low
 
-C1_buffer_reg[4] = DFFEAS(C1L24, GLOBAL(A1L12), A1L598,  , C1_state_reg,  ,  ,  ,  );
+C1_buffer_reg[3] = DFFEAS(C1L38, A1L11, A1L598,  , C1_state_reg,  ,  ,  ,  );
 
 
---C1L7 is ps2:inst|Decoder0~6 at LCCOMB_X39_Y16_N0
-C1L7 = (!C1_cnt_reg[1] & !C1_cnt_reg[0]);
+--C1L14 is ps2:inst|Decoder0~10 at LCCOMB_X23_Y26_N18
+C1L14 = (C1_cnt_reg[2] & (!C1_cnt_reg[0] & C1L6));
 
 
---C1L16 is ps2:inst|buffer_next~7 at LCCOMB_X39_Y16_N26
-C1L16 = (C1L5 & ((C1L7 & (A1L557)) # (!C1L7 & ((C1_buffer_reg[4]))))) # (!C1L5 & (((C1_buffer_reg[4]))));
+--C1L38 is ps2:inst|buffer_next~9 at LCCOMB_X26_Y26_N14
+C1L38 = (C1L14 & (A1L557)) # (!C1L14 & ((C1_buffer_reg[3])));
 
 
---C1_buffer_reg[2] is ps2:inst|buffer_reg[2] at FF_X40_Y16_N21
+--C1L21 is ps2:inst|Equal2~2 at LCCOMB_X27_Y26_N8
+C1L21 = (C1L19 & (C1L20 & (C1L30 & !C1L38)));
+
+
+--C1L77 is ps2:inst|hex_code~2 at LCCOMB_X28_Y26_N28
+C1L77 = (C1L29) # ((C1_old_value_reg[0] & C1L21));
+
+
+--C1_state_reg is ps2:inst|state_reg at FF_X23_Y26_N23
 --register power-up is low
 
-C1_buffer_reg[2] = DFFEAS(C1L20, GLOBAL(A1L12), A1L598,  , C1_state_reg,  ,  ,  ,  );
+C1_state_reg = DFFEAS(C1L127, A1L11, A1L598,  ,  ,  ,  ,  ,  );
 
 
---C1L8 is ps2:inst|Decoder0~7 at LCCOMB_X39_Y16_N22
-C1L8 = (!C1_cnt_reg[2] & !C1_cnt_reg[0]);
+--C1L18 is ps2:inst|Equal1~0 at LCCOMB_X23_Y26_N0
+C1L18 = (!C1_cnt_reg[3] & (!C1_cnt_reg[2] & (!C1_cnt_reg[0] & !C1_cnt_reg[1])));
 
 
---C1L17 is ps2:inst|buffer_next~8 at LCCOMB_X39_Y16_N8
-C1L17 = (C1L1 & ((C1L8 & (A1L557)) # (!C1L8 & ((C1_buffer_reg[2]))))) # (!C1L1 & (((C1_buffer_reg[2]))));
+--C1L119 is ps2:inst|parity~4 at LCCOMB_X26_Y26_N20
+C1L119 = C1L31 $ (C1L29 $ (C1L35 $ (C1L34)));
 
 
---C1L32 is ps2:inst|cnt_next[1]~0 at LCCOMB_X38_Y16_N12
-C1L32 = (C1_cnt_reg[0] $ (!C1_cnt_reg[1])) # (!C1_state_reg);
+--C1L120 is ps2:inst|parity~5 at LCCOMB_X26_Y26_N26
+C1L120 = C1L36 $ (C1_parity $ (C1L37));
 
 
---D1_ff_reg[1] is ps2:inst|deb:deb_inst|ff_reg[1] at FF_X38_Y16_N29
+--C1L121 is ps2:inst|parity~6 at LCCOMB_X26_Y26_N16
+C1L121 = C1L30 $ (C1L38 $ (C1L120 $ (C1L119)));
+
+
+--C1L75 is ps2:inst|hex_code[15]~3 at LCCOMB_X23_Y26_N20
+C1L75 = (C1_state_reg & (C1L18 & (C1L121 $ (!C1L32))));
+
+
+--C1L78 is ps2:inst|hex_code~4 at LCCOMB_X28_Y26_N30
+C1L78 = (C1L37) # ((C1_old_value_reg[1] & C1L21));
+
+
+--C1L79 is ps2:inst|hex_code~5 at LCCOMB_X24_Y26_N16
+C1L79 = (C1L36) # ((C1_old_value_reg[2] & C1L21));
+
+
+--C1L80 is ps2:inst|hex_code~6 at LCCOMB_X23_Y26_N30
+C1L80 = (C1L38) # ((C1L94 & (C1L19 & C1L20)));
+
+
+--C1L81 is ps2:inst|hex_code~7 at LCCOMB_X28_Y26_N8
+C1L81 = (C1L35) # ((C1_old_value_reg[4] & C1L21));
+
+
+--C1L82 is ps2:inst|hex_code~8 at LCCOMB_X26_Y26_N4
+C1L82 = (C1L38 & (((C1L34)))) # (!C1L38 & ((C1L30 & (C1_old_value_reg[5])) # (!C1L30 & ((C1L34)))));
+
+
+--C1L83 is ps2:inst|hex_code~9 at LCCOMB_X26_Y26_N28
+C1L83 = (C1L19 & ((C1L20 & ((C1L82))) # (!C1L20 & (C1L34)))) # (!C1L19 & (((C1L34))));
+
+
+--C1L84 is ps2:inst|hex_code~10 at LCCOMB_X29_Y26_N28
+C1L84 = (C1L21 & ((C1_old_value_reg[6]))) # (!C1L21 & (C1L31));
+
+
+--C1L85 is ps2:inst|hex_code~11 at LCCOMB_X29_Y26_N10
+C1L85 = (C1L21 & (C1_old_value_reg[7])) # (!C1L21 & ((C1L30)));
+
+
+--C1L22 is ps2:inst|Equal3~0 at LCCOMB_X27_Y26_N30
+C1L22 = (C1L37 & (C1_old_value_reg[1] & (C1L29 $ (!C1_old_value_reg[0])))) # (!C1L37 & (!C1_old_value_reg[1] & (C1L29 $ (!C1_old_value_reg[0]))));
+
+
+--C1L23 is ps2:inst|Equal3~1 at LCCOMB_X27_Y26_N10
+C1L23 = (C1L35 & (C1_old_value_reg[4] & (C1L36 $ (!C1_old_value_reg[2])))) # (!C1L35 & (!C1_old_value_reg[4] & (C1L36 $ (!C1_old_value_reg[2]))));
+
+
+--C1L24 is ps2:inst|Equal3~2 at LCCOMB_X27_Y26_N26
+C1L24 = (C1L34 & (C1_old_value_reg[5] & (C1L31 $ (!C1_old_value_reg[6])))) # (!C1L34 & (!C1_old_value_reg[5] & (C1L31 $ (!C1_old_value_reg[6]))));
+
+
+--C1L25 is ps2:inst|Equal3~3 at LCCOMB_X22_Y26_N16
+C1L25 = C1_old_value_reg[3] $ (((C1L14 & ((A1L557))) # (!C1L14 & (C1_buffer_reg[3]))));
+
+
+--C1L26 is ps2:inst|Equal3~4 at LCCOMB_X27_Y26_N20
+C1L26 = (C1L23 & (C1L22 & (C1L24 & !C1L25)));
+
+
+--C1L27 is ps2:inst|Equal3~5 at LCCOMB_X27_Y26_N14
+C1L27 = (C1L32 & (C1_old_value_reg[9] & (C1L33 $ (!C1_old_value_reg[8])))) # (!C1L32 & (!C1_old_value_reg[9] & (C1L33 $ (!C1_old_value_reg[8]))));
+
+
+--C1L28 is ps2:inst|Equal3~6 at LCCOMB_X27_Y26_N28
+C1L28 = (C1L27 & (C1_old_value_reg[7] $ (!C1L30)));
+
+
+--C1L86 is ps2:inst|hex_code~12 at LCCOMB_X28_Y26_N26
+C1L86 = (!C1L21 & (C1_old_value_reg[0] & ((!C1L26) # (!C1L28))));
+
+
+--C1L87 is ps2:inst|hex_code~13 at LCCOMB_X28_Y26_N12
+C1L87 = (!C1L21 & (C1_old_value_reg[1] & ((!C1L26) # (!C1L28))));
+
+
+--C1L88 is ps2:inst|hex_code~14 at LCCOMB_X28_Y26_N22
+C1L88 = (!C1L21 & (C1_old_value_reg[2] & ((!C1L26) # (!C1L28))));
+
+
+--C1L89 is ps2:inst|hex_code~15 at LCCOMB_X29_Y26_N20
+C1L89 = (C1_old_value_reg[3] & (!C1L21 & ((!C1L26) # (!C1L28))));
+
+
+--C1L90 is ps2:inst|hex_code~16 at LCCOMB_X28_Y26_N4
+C1L90 = (C1L21) # ((C1_old_value_reg[5] & ((!C1L26) # (!C1L28))));
+
+
+--C1L91 is ps2:inst|hex_code~17 at LCCOMB_X28_Y26_N14
+C1L91 = (!C1L21 & (C1_old_value_reg[4] & ((!C1L26) # (!C1L28))));
+
+
+--C1L92 is ps2:inst|hex_code~18 at LCCOMB_X26_Y26_N8
+C1L92 = (C1L21) # ((C1_old_value_reg[7] & ((!C1L26) # (!C1L28))));
+
+
+--C1L93 is ps2:inst|hex_code~19 at LCCOMB_X29_Y26_N18
+C1L93 = (C1L21) # ((C1_old_value_reg[6] & ((!C1L26) # (!C1L28))));
+
+
+--C1L50 is ps2:inst|cnt_next[0]~0 at LCCOMB_X24_Y26_N8
+C1L50 = (!C1_state_reg) # (!C1_cnt_reg[0]);
+
+
+--C1L55 is ps2:inst|cnt_reg[1]~0 at LCCOMB_X24_Y26_N10
+C1L55 = (!D1_out_reg & (C1_ps2clk_reg & ((C1_state_reg) # (!A1L557))));
+
+
+--C1L2 is ps2:inst|Add1~1 at LCCOMB_X24_Y26_N4
+C1L2 = C1_cnt_reg[1] $ (!C1_cnt_reg[0]);
+
+
+--C1L3 is ps2:inst|Add1~2 at LCCOMB_X24_Y26_N26
+C1L3 = C1_cnt_reg[2] $ (((!C1_cnt_reg[1] & !C1_cnt_reg[0])));
+
+
+--C1L51 is ps2:inst|cnt_next[3]~1 at LCCOMB_X23_Y26_N4
+C1L51 = (C1L1 $ (!C1_cnt_reg[3])) # (!C1_state_reg);
+
+
+--D1_ff_reg[1] is ps2:inst|deb:deb_inst|ff_reg[1] at FF_X30_Y26_N5
 --register power-up is low
 
-D1_ff_reg[1] = DFFEAS(D1L11, GLOBAL(A1L12), A1L598,  ,  ,  ,  ,  ,  );
+D1_ff_reg[1] = DFFEAS(D1L14, GLOBAL(A1L12), A1L598,  ,  ,  ,  ,  ,  );
 
 
---D1_cnt_reg[2] is ps2:inst|deb:deb_inst|cnt_reg[2] at FF_X38_Y16_N23
+--D1_cnt_reg[3] is ps2:inst|deb:deb_inst|cnt_reg[3] at FF_X30_Y26_N27
+--register power-up is low
+
+D1_cnt_reg[3] = DFFEAS(D1L4, GLOBAL(A1L12), A1L598,  ,  ,  ,  ,  ,  );
+
+
+--D1_cnt_reg[2] is ps2:inst|deb:deb_inst|cnt_reg[2] at FF_X30_Y26_N17
 --register power-up is low
 
 D1_cnt_reg[2] = DFFEAS(D1L3, GLOBAL(A1L12), A1L598,  ,  ,  ,  ,  ,  );
 
 
---D1_cnt_reg[0] is ps2:inst|deb:deb_inst|cnt_reg[0] at FF_X38_Y16_N15
+--D1_cnt_reg[0] is ps2:inst|deb:deb_inst|cnt_reg[0] at FF_X30_Y26_N23
 --register power-up is low
 
 D1_cnt_reg[0] = DFFEAS(D1L1, GLOBAL(A1L12), A1L598,  ,  ,  ,  ,  ,  );
 
 
---D1_cnt_reg[1] is ps2:inst|deb:deb_inst|cnt_reg[1] at FF_X38_Y16_N17
+--D1_cnt_reg[1] is ps2:inst|deb:deb_inst|cnt_reg[1] at FF_X30_Y26_N21
 --register power-up is low
 
 D1_cnt_reg[1] = DFFEAS(D1L2, GLOBAL(A1L12), A1L598,  ,  ,  ,  ,  ,  );
 
 
---D1L14 is ps2:inst|deb:deb_inst|out_reg~0 at LCCOMB_X38_Y16_N20
-D1L14 = (D1_cnt_reg[2] & (D1_cnt_reg[0] & D1_cnt_reg[1]));
+--D1L17 is ps2:inst|deb:deb_inst|out_reg~0 at LCCOMB_X30_Y26_N10
+D1L17 = (D1_cnt_reg[2] & (D1_cnt_reg[0] & D1_cnt_reg[1]));
 
 
---D1L15 is ps2:inst|deb:deb_inst|out_reg~1 at LCCOMB_X38_Y16_N2
-D1L15 = (D1L14 & (D1_ff_reg[1])) # (!D1L14 & ((D1_out_reg)));
+--D1L18 is ps2:inst|deb:deb_inst|out_reg~1 at LCCOMB_X23_Y26_N28
+D1L18 = (D1_cnt_reg[3] & ((D1L17 & (D1_ff_reg[1])) # (!D1L17 & ((D1_out_reg))))) # (!D1_cnt_reg[3] & (((D1_out_reg))));
 
 
---C1L34 is ps2:inst|cnt_next[3]~1 at LCCOMB_X39_Y16_N30
-C1L34 = (C1_cnt_reg[3] $ (((C1L7 & !C1_cnt_reg[2])))) # (!C1_state_reg);
+--C1L15 is ps2:inst|Equal0~0 at LCCOMB_X27_Y25_N12
+C1L15 = (!C1_old_value_reg[9] & (!C1_old_value_reg[8] & (C1_old_value_reg[7] & C1_old_value_reg[6])));
 
 
---C1L31 is ps2:inst|cnt_next[0]~2 at LCCOMB_X38_Y16_N6
-C1L31 = (C1_state_reg & !C1_cnt_reg[0]);
+--C1L16 is ps2:inst|Equal0~1 at LCCOMB_X26_Y25_N24
+C1L16 = (!C1_old_value_reg[2] & (C1_old_value_reg[4] & (C1_old_value_reg[5] & !C1_old_value_reg[3])));
 
 
---C1L33 is ps2:inst|cnt_next[2]~3 at LCCOMB_X38_Y16_N26
-C1L33 = (C1_state_reg & (C1_cnt_reg[2] $ (((!C1_cnt_reg[0] & !C1_cnt_reg[1])))));
+--C1L17 is ps2:inst|Equal0~2 at LCCOMB_X27_Y25_N14
+C1L17 = (!C1_old_value_reg[0] & !C1_old_value_reg[1]);
 
 
---C1L70 is ps2:inst|old_value_reg[9]~0 at LCCOMB_X38_Y16_N30
-C1L70 = (C1_ps2clk_reg & (!C1_state_reg & !D1_out_reg));
+--C1L108 is ps2:inst|old_value_reg~0 at LCCOMB_X27_Y25_N16
+C1L108 = (C1_buffer_reg[0] & (((!C1L16) # (!C1L17)) # (!C1L15)));
 
 
---D1_ff_reg[0] is ps2:inst|deb:deb_inst|ff_reg[0] at FF_X38_Y16_N13
+--C1L106 is ps2:inst|old_value_reg[9]~1 at LCCOMB_X23_Y26_N26
+C1L106 = (C1_ps2clk_reg & (!A1L557 & (!C1_state_reg & !D1_out_reg)));
+
+
+--C1L127 is ps2:inst|state_next~0 at LCCOMB_X23_Y26_N22
+C1L127 = (C1L106) # ((C1_state_reg & !C1L18));
+
+
+--C1L122 is ps2:inst|parity~7 at LCCOMB_X26_Y26_N24
+C1L122 = (C1_state_reg & (C1L119 $ (C1L120 $ (C1L124))));
+
+
+--C1L123 is ps2:inst|parity~8 at LCCOMB_X23_Y26_N2
+C1L123 = (C1L106) # ((C1_state_reg & C1L18));
+
+
+--C1L109 is ps2:inst|old_value_reg~2 at LCCOMB_X27_Y25_N2
+C1L109 = (C1_buffer_reg[1] & (((!C1L16) # (!C1L17)) # (!C1L15)));
+
+
+--C1L110 is ps2:inst|old_value_reg~3 at LCCOMB_X27_Y25_N4
+C1L110 = (C1_buffer_reg[2] & (((!C1L16) # (!C1L17)) # (!C1L15)));
+
+
+--C1L111 is ps2:inst|old_value_reg~4 at LCCOMB_X26_Y25_N26
+C1L111 = (C1_buffer_reg[3] & (((!C1L16) # (!C1L17)) # (!C1L15)));
+
+
+--C1L112 is ps2:inst|old_value_reg~5 at LCCOMB_X26_Y25_N28
+C1L112 = (C1_buffer_reg[4] & (((!C1L16) # (!C1L15)) # (!C1L17)));
+
+
+--C1L113 is ps2:inst|old_value_reg~6 at LCCOMB_X26_Y25_N2
+C1L113 = (C1_buffer_reg[5] & (((!C1L16) # (!C1L15)) # (!C1L17)));
+
+
+--C1L114 is ps2:inst|old_value_reg~7 at LCCOMB_X27_Y25_N18
+C1L114 = (C1_buffer_reg[6] & (((!C1L16) # (!C1L17)) # (!C1L15)));
+
+
+--C1L115 is ps2:inst|old_value_reg~8 at LCCOMB_X27_Y25_N28
+C1L115 = (C1_buffer_reg[7] & (((!C1L16) # (!C1L17)) # (!C1L15)));
+
+
+--C1L116 is ps2:inst|old_value_reg~9 at LCCOMB_X27_Y25_N10
+C1L116 = (C1_buffer_reg[8] & (((!C1L16) # (!C1L17)) # (!C1L15)));
+
+
+--C1L117 is ps2:inst|old_value_reg~10 at LCCOMB_X27_Y25_N20
+C1L117 = (C1_buffer_reg[9] & (((!C1L16) # (!C1L17)) # (!C1L15)));
+
+
+--D1_ff_reg[0] is ps2:inst|deb:deb_inst|ff_reg[0] at FF_X30_Y26_N13
 --register power-up is low
 
-D1_ff_reg[0] = DFFEAS( , GLOBAL(A1L12), A1L598,  ,  , A1L554,  ,  , VCC);
+D1_ff_reg[0] = DFFEAS(D1L12, GLOBAL(A1L12), A1L598,  ,  ,  ,  ,  ,  );
 
 
---D1_in_changed is ps2:inst|deb:deb_inst|in_changed at LCCOMB_X38_Y16_N18
-D1_in_changed = D1_ff_reg[0] $ (D1_ff_reg[1]);
+--D1_in_changed is ps2:inst|deb:deb_inst|in_changed at LCCOMB_X30_Y26_N18
+D1_in_changed = D1_ff_reg[1] $ (D1_ff_reg[0]);
 
 
---D1L3 is ps2:inst|deb:deb_inst|cnt_next[2]~0 at LCCOMB_X38_Y16_N22
+--D1L3 is ps2:inst|deb:deb_inst|cnt_next[2]~2 at LCCOMB_X30_Y26_N16
 D1L3 = (!D1_in_changed & (D1_cnt_reg[2] $ (((D1_cnt_reg[0] & D1_cnt_reg[1])))));
 
 
---D1L1 is ps2:inst|deb:deb_inst|cnt_next[0]~1 at LCCOMB_X38_Y16_N14
+--D1L1 is ps2:inst|deb:deb_inst|cnt_next[0]~3 at LCCOMB_X30_Y26_N22
 D1L1 = (!D1_cnt_reg[0] & (D1_ff_reg[0] $ (!D1_ff_reg[1])));
 
 
---D1L2 is ps2:inst|deb:deb_inst|cnt_next[1]~2 at LCCOMB_X38_Y16_N16
+--D1L2 is ps2:inst|deb:deb_inst|cnt_next[1]~4 at LCCOMB_X30_Y26_N20
 D1L2 = (D1_cnt_reg[0] & (!D1_cnt_reg[1] & (D1_ff_reg[1] $ (!D1_ff_reg[0])))) # (!D1_cnt_reg[0] & (D1_cnt_reg[1] & (D1_ff_reg[1] $ (!D1_ff_reg[0]))));
 
 
---C1L73 is ps2:inst|state_next~2 at LCCOMB_X38_Y16_N8
-C1L73 = (C1_state_reg & (((!C1L46)))) # (!C1_state_reg & (!D1_out_reg & ((C1_ps2clk_reg))));
+--C1L94 is ps2:inst|hex_code~20 at LCCOMB_X23_Y26_N14
+C1L94 = (C1_old_value_reg[3] & ((C1L7 & (A1L557)) # (!C1L7 & ((C1_buffer_reg[7])))));
 
 
---C1_hex_code[1] is ps2:inst|hex_code[1] at LCCOMB_X39_Y16_N2
-C1_hex_code[1] = (GLOBAL(C1L48) & (C1L9)) # (!GLOBAL(C1L48) & ((C1_hex_code[1])));
+--C1L124 is ps2:inst|parity~9 at LCCOMB_X26_Y26_N2
+C1L124 = C1L38 $ (((C1L7 & ((A1L557))) # (!C1L7 & (C1_buffer_reg[7]))));
 
 
---C1_hex_code[6] is ps2:inst|hex_code[6] at LCCOMB_X37_Y16_N30
-C1_hex_code[6] = (GLOBAL(C1L48) & ((C1L10))) # (!GLOBAL(C1L48) & (C1_hex_code[6]));
+--D1L4 is ps2:inst|deb:deb_inst|cnt_next[3]~5 at LCCOMB_X30_Y26_N26
+D1L4 = (D1_ff_reg[0] & (D1_ff_reg[1] & (D1_cnt_reg[3] $ (D1L17)))) # (!D1_ff_reg[0] & (!D1_ff_reg[1] & (D1_cnt_reg[3] $ (D1L17))));
 
 
---C1_hex_code[7] is ps2:inst|hex_code[7] at LCCOMB_X37_Y16_N28
-C1_hex_code[7] = (GLOBAL(C1L48) & ((C1L11))) # (!GLOBAL(C1L48) & (C1_hex_code[7]));
+--C1_hex_code[0] is ps2:inst|hex_code[0] at LCCOMB_X28_Y26_N20
+C1_hex_code[0] = (GLOBAL(C1L76) & ((C1L77))) # (!GLOBAL(C1L76) & (C1_hex_code[0]));
 
 
---C1_hex_code[8] is ps2:inst|hex_code[8] at LCCOMB_X40_Y16_N14
-C1_hex_code[8] = (GLOBAL(C1L48) & ((C1_old_value_reg[2]))) # (!GLOBAL(C1L48) & (C1_hex_code[8]));
+--C1_hex_code[1] is ps2:inst|hex_code[1] at LCCOMB_X28_Y26_N6
+C1_hex_code[1] = (GLOBAL(C1L76) & ((C1L78))) # (!GLOBAL(C1L76) & (C1_hex_code[1]));
 
 
---C1_hex_code[9] is ps2:inst|hex_code[9] at LCCOMB_X40_Y16_N22
-C1_hex_code[9] = (GLOBAL(C1L48) & ((C1_old_value_reg[3]))) # (!GLOBAL(C1L48) & (C1_hex_code[9]));
+--C1_hex_code[2] is ps2:inst|hex_code[2] at LCCOMB_X24_Y26_N22
+C1_hex_code[2] = (GLOBAL(C1L76) & ((C1L79))) # (!GLOBAL(C1L76) & (C1_hex_code[2]));
 
 
---C1_hex_code[10] is ps2:inst|hex_code[10] at LCCOMB_X40_Y16_N4
-C1_hex_code[10] = (GLOBAL(C1L48) & ((C1_old_value_reg[4]))) # (!GLOBAL(C1L48) & (C1_hex_code[10]));
+--C1_hex_code[3] is ps2:inst|hex_code[3] at LCCOMB_X23_Y26_N12
+C1_hex_code[3] = (GLOBAL(C1L76) & ((C1L80))) # (!GLOBAL(C1L76) & (C1_hex_code[3]));
 
 
---C1_hex_code[11] is ps2:inst|hex_code[11] at LCCOMB_X40_Y16_N8
-C1_hex_code[11] = (GLOBAL(C1L48) & ((C1_old_value_reg[5]))) # (!GLOBAL(C1L48) & (C1_hex_code[11]));
+--C1_hex_code[4] is ps2:inst|hex_code[4] at LCCOMB_X28_Y26_N24
+C1_hex_code[4] = (GLOBAL(C1L76) & ((C1L81))) # (!GLOBAL(C1L76) & (C1_hex_code[4]));
 
 
---C1_hex_code[5] is ps2:inst|hex_code[5] at LCCOMB_X37_Y16_N18
-C1_hex_code[5] = (GLOBAL(C1L48) & ((C1L12))) # (!GLOBAL(C1L48) & (C1_hex_code[5]));
+--C1_hex_code[5] is ps2:inst|hex_code[5] at LCCOMB_X26_Y26_N10
+C1_hex_code[5] = (GLOBAL(C1L76) & ((C1L83))) # (!GLOBAL(C1L76) & (C1_hex_code[5]));
 
 
---C1_hex_code[4] is ps2:inst|hex_code[4] at LCCOMB_X38_Y16_N10
-C1_hex_code[4] = (GLOBAL(C1L48) & ((C1L14))) # (!GLOBAL(C1L48) & (C1_hex_code[4]));
+--C1_hex_code[6] is ps2:inst|hex_code[6] at LCCOMB_X29_Y26_N4
+C1_hex_code[6] = (GLOBAL(C1L76) & ((C1L84))) # (!GLOBAL(C1L76) & (C1_hex_code[6]));
 
 
---C1_hex_code[3] is ps2:inst|hex_code[3] at LCCOMB_X39_Y16_N20
-C1_hex_code[3] = (GLOBAL(C1L48) & ((C1L15))) # (!GLOBAL(C1L48) & (C1_hex_code[3]));
+--C1_hex_code[7] is ps2:inst|hex_code[7] at LCCOMB_X29_Y26_N22
+C1_hex_code[7] = (GLOBAL(C1L76) & ((C1L85))) # (!GLOBAL(C1L76) & (C1_hex_code[7]));
 
 
---C1_hex_code[2] is ps2:inst|hex_code[2] at LCCOMB_X39_Y16_N6
-C1_hex_code[2] = (GLOBAL(C1L48) & ((C1L16))) # (!GLOBAL(C1L48) & (C1_hex_code[2]));
+--C1_hex_code[8] is ps2:inst|hex_code[8] at LCCOMB_X28_Y26_N2
+C1_hex_code[8] = (GLOBAL(C1L76) & ((C1L86))) # (!GLOBAL(C1L76) & (C1_hex_code[8]));
 
 
---C1_hex_code[0] is ps2:inst|hex_code[0] at LCCOMB_X39_Y16_N24
-C1_hex_code[0] = (GLOBAL(C1L48) & ((C1L17))) # (!GLOBAL(C1L48) & (C1_hex_code[0]));
+--C1_hex_code[9] is ps2:inst|hex_code[9] at LCCOMB_X28_Y26_N16
+C1_hex_code[9] = (GLOBAL(C1L76) & (C1L87)) # (!GLOBAL(C1L76) & ((C1_hex_code[9])));
 
 
---C1_hex_code[12] is ps2:inst|hex_code[12] at LCCOMB_X37_Y16_N22
-C1_hex_code[12] = (GLOBAL(C1L48) & ((C1_old_value_reg[6]))) # (!GLOBAL(C1L48) & (C1_hex_code[12]));
+--C1_hex_code[10] is ps2:inst|hex_code[10] at LCCOMB_X28_Y26_N18
+C1_hex_code[10] = (GLOBAL(C1L76) & ((C1L88))) # (!GLOBAL(C1L76) & (C1_hex_code[10]));
 
 
---C1_hex_code[13] is ps2:inst|hex_code[13] at LCCOMB_X37_Y16_N16
-C1_hex_code[13] = (GLOBAL(C1L48) & ((C1_old_value_reg[7]))) # (!GLOBAL(C1L48) & (C1_hex_code[13]));
+--C1_hex_code[11] is ps2:inst|hex_code[11] at LCCOMB_X29_Y26_N8
+C1_hex_code[11] = (GLOBAL(C1L76) & ((C1L89))) # (!GLOBAL(C1L76) & (C1_hex_code[11]));
 
 
---C1_hex_code[14] is ps2:inst|hex_code[14] at LCCOMB_X37_Y16_N26
-C1_hex_code[14] = (GLOBAL(C1L48) & ((C1_old_value_reg[8]))) # (!GLOBAL(C1L48) & (C1_hex_code[14]));
+--C1_hex_code[13] is ps2:inst|hex_code[13] at LCCOMB_X28_Y26_N0
+C1_hex_code[13] = (GLOBAL(C1L76) & ((C1L90))) # (!GLOBAL(C1L76) & (C1_hex_code[13]));
 
 
---C1_hex_code[15] is ps2:inst|hex_code[15] at LCCOMB_X37_Y16_N0
-C1_hex_code[15] = (GLOBAL(C1L48) & ((C1_old_value_reg[9]))) # (!GLOBAL(C1L48) & (C1_hex_code[15]));
+--C1_hex_code[12] is ps2:inst|hex_code[12] at LCCOMB_X28_Y26_N10
+C1_hex_code[12] = (GLOBAL(C1L76) & ((C1L91))) # (!GLOBAL(C1L76) & (C1_hex_code[12]));
 
 
---C1_old_value_reg[2] is ps2:inst|old_value_reg[2] at LCCOMB_X40_Y16_N12
-C1_old_value_reg[2] = (GLOBAL(C1L71) & ((C1_buffer_reg[2]))) # (!GLOBAL(C1L71) & (C1_old_value_reg[2]));
+--C1_hex_code[15] is ps2:inst|hex_code[15] at LCCOMB_X26_Y26_N6
+C1_hex_code[15] = (GLOBAL(C1L76) & ((C1L92))) # (!GLOBAL(C1L76) & (C1_hex_code[15]));
 
 
---C1_old_value_reg[3] is ps2:inst|old_value_reg[3] at LCCOMB_X40_Y16_N24
-C1_old_value_reg[3] = (GLOBAL(C1L71) & ((C1_buffer_reg[3]))) # (!GLOBAL(C1L71) & (C1_old_value_reg[3]));
+--C1_hex_code[14] is ps2:inst|hex_code[14] at LCCOMB_X29_Y26_N26
+C1_hex_code[14] = (GLOBAL(C1L76) & ((C1L93))) # (!GLOBAL(C1L76) & (C1_hex_code[14]));
 
 
---C1_old_value_reg[4] is ps2:inst|old_value_reg[4] at LCCOMB_X40_Y16_N2
-C1_old_value_reg[4] = (GLOBAL(C1L71) & ((C1_buffer_reg[4]))) # (!GLOBAL(C1L71) & (C1_old_value_reg[4]));
+--C1_old_value_reg[0] is ps2:inst|old_value_reg[0] at LCCOMB_X27_Y25_N22
+C1_old_value_reg[0] = (GLOBAL(C1L107) & ((C1L108))) # (!GLOBAL(C1L107) & (C1_old_value_reg[0]));
 
 
---C1_old_value_reg[5] is ps2:inst|old_value_reg[5] at LCCOMB_X40_Y16_N6
-C1_old_value_reg[5] = (GLOBAL(C1L71) & ((C1_buffer_reg[5]))) # (!GLOBAL(C1L71) & (C1_old_value_reg[5]));
+--C1_parity is ps2:inst|parity at LCCOMB_X26_Y26_N30
+C1_parity = (C1L123 & ((C1L122))) # (!C1L123 & (C1_parity));
 
 
---C1_old_value_reg[6] is ps2:inst|old_value_reg[6] at LCCOMB_X37_Y16_N20
-C1_old_value_reg[6] = (GLOBAL(C1L71) & ((C1_buffer_reg[6]))) # (!GLOBAL(C1L71) & (C1_old_value_reg[6]));
+--C1_old_value_reg[1] is ps2:inst|old_value_reg[1] at LCCOMB_X27_Y25_N0
+C1_old_value_reg[1] = (GLOBAL(C1L107) & ((C1L109))) # (!GLOBAL(C1L107) & (C1_old_value_reg[1]));
 
 
---C1_old_value_reg[7] is ps2:inst|old_value_reg[7] at LCCOMB_X37_Y16_N10
-C1_old_value_reg[7] = (GLOBAL(C1L71) & ((C1_buffer_reg[7]))) # (!GLOBAL(C1L71) & (C1_old_value_reg[7]));
+--C1_old_value_reg[2] is ps2:inst|old_value_reg[2] at LCCOMB_X27_Y25_N30
+C1_old_value_reg[2] = (GLOBAL(C1L107) & ((C1L110))) # (!GLOBAL(C1L107) & (C1_old_value_reg[2]));
 
 
---C1_old_value_reg[8] is ps2:inst|old_value_reg[8] at LCCOMB_X37_Y16_N12
-C1_old_value_reg[8] = (GLOBAL(C1L71) & ((C1_buffer_reg[8]))) # (!GLOBAL(C1L71) & (C1_old_value_reg[8]));
+--C1_old_value_reg[3] is ps2:inst|old_value_reg[3] at LCCOMB_X22_Y26_N30
+C1_old_value_reg[3] = (GLOBAL(C1L107) & ((C1L111))) # (!GLOBAL(C1L107) & (C1_old_value_reg[3]));
 
 
---C1_old_value_reg[9] is ps2:inst|old_value_reg[9] at LCCOMB_X37_Y16_N2
-C1_old_value_reg[9] = (GLOBAL(C1L71) & ((C1_buffer_reg[9]))) # (!GLOBAL(C1L71) & (C1_old_value_reg[9]));
+--C1_old_value_reg[4] is ps2:inst|old_value_reg[4] at LCCOMB_X26_Y25_N16
+C1_old_value_reg[4] = (GLOBAL(C1L107) & (C1L112)) # (!GLOBAL(C1L107) & ((C1_old_value_reg[4])));
+
+
+--C1_old_value_reg[5] is ps2:inst|old_value_reg[5] at LCCOMB_X26_Y25_N14
+C1_old_value_reg[5] = (GLOBAL(C1L107) & (C1L113)) # (!GLOBAL(C1L107) & ((C1_old_value_reg[5])));
+
+
+--C1_old_value_reg[6] is ps2:inst|old_value_reg[6] at LCCOMB_X27_Y25_N24
+C1_old_value_reg[6] = (GLOBAL(C1L107) & ((C1L114))) # (!GLOBAL(C1L107) & (C1_old_value_reg[6]));
+
+
+--C1_old_value_reg[7] is ps2:inst|old_value_reg[7] at LCCOMB_X27_Y25_N26
+C1_old_value_reg[7] = (GLOBAL(C1L107) & (C1L115)) # (!GLOBAL(C1L107) & ((C1_old_value_reg[7])));
+
+
+--C1_old_value_reg[8] is ps2:inst|old_value_reg[8] at LCCOMB_X27_Y25_N8
+C1_old_value_reg[8] = (GLOBAL(C1L107) & (C1L116)) # (!GLOBAL(C1L107) & ((C1_old_value_reg[8])));
+
+
+--C1_old_value_reg[9] is ps2:inst|old_value_reg[9] at LCCOMB_X27_Y25_N6
+C1_old_value_reg[9] = (GLOBAL(C1L107) & (C1L117)) # (!GLOBAL(C1L107) & ((C1_old_value_reg[9])));
 
 
 
@@ -913,7 +1295,7 @@ SW[8] = INPUT();
 
 
 --A1L435 is HEX0_D[0]~output at IOOBUF_X21_Y29_N23
-A1L435 = OUTPUT_BUFFER.O(.I(!E1L11), , , , , , , , , , , , , , , , , );
+A1L435 = OUTPUT_BUFFER.O(.I(E1L12), , , , , , , , , , , , , , , , , );
 
 
 --HEX0_D[0] is HEX0_D[0] at PIN_E11
@@ -921,7 +1303,7 @@ HEX0_D[0] = OUTPUT();
 
 
 --A1L437 is HEX0_D[1]~output at IOOBUF_X21_Y29_N30
-A1L437 = OUTPUT_BUFFER.O(.I(!E1L12), , , , , , , , , , , , , , , , , );
+A1L437 = OUTPUT_BUFFER.O(.I(E1L11), , , , , , , , , , , , , , , , , );
 
 
 --HEX0_D[1] is HEX0_D[1] at PIN_F11
@@ -929,7 +1311,7 @@ HEX0_D[1] = OUTPUT();
 
 
 --A1L439 is HEX0_D[2]~output at IOOBUF_X26_Y29_N2
-A1L439 = OUTPUT_BUFFER.O(.I(!E1L12), , , , , , , , , , , , , , , , , );
+A1L439 = OUTPUT_BUFFER.O(.I(E1L10), , , , , , , , , , , , , , , , , );
 
 
 --HEX0_D[2] is HEX0_D[2] at PIN_H12
@@ -937,7 +1319,7 @@ HEX0_D[2] = OUTPUT();
 
 
 --A1L441 is HEX0_D[3]~output at IOOBUF_X28_Y29_N30
-A1L441 = OUTPUT_BUFFER.O(.I(!E1L12), , , , , , , , , , , , , , , , , );
+A1L441 = OUTPUT_BUFFER.O(.I(E1L9), , , , , , , , , , , , , , , , , );
 
 
 --HEX0_D[3] is HEX0_D[3] at PIN_H13
@@ -945,7 +1327,7 @@ HEX0_D[3] = OUTPUT();
 
 
 --A1L443 is HEX0_D[4]~output at IOOBUF_X26_Y29_N9
-A1L443 = OUTPUT_BUFFER.O(.I(E1L9), , , , , , , , , , , , , , , , , );
+A1L443 = OUTPUT_BUFFER.O(.I(E1L8), , , , , , , , , , , , , , , , , );
 
 
 --HEX0_D[4] is HEX0_D[4] at PIN_G12
@@ -953,7 +1335,7 @@ HEX0_D[4] = OUTPUT();
 
 
 --A1L445 is HEX0_D[5]~output at IOOBUF_X28_Y29_N23
-A1L445 = OUTPUT_BUFFER.O(.I(!E1L11), , , , , , , , , , , , , , , , , );
+A1L445 = OUTPUT_BUFFER.O(.I(E1L7), , , , , , , , , , , , , , , , , );
 
 
 --HEX0_D[5] is HEX0_D[5] at PIN_F12
@@ -961,7 +1343,7 @@ HEX0_D[5] = OUTPUT();
 
 
 --A1L447 is HEX0_D[6]~output at IOOBUF_X26_Y29_N16
-A1L447 = OUTPUT_BUFFER.O(.I(E1L9), , , , , , , , , , , , , , , , , );
+A1L447 = OUTPUT_BUFFER.O(.I(!E1L6), , , , , , , , , , , , , , , , , );
 
 
 --HEX0_D[6] is HEX0_D[6] at PIN_F13
@@ -977,7 +1359,7 @@ HEX0_DP = OUTPUT();
 
 
 --A1L452 is HEX1_D[0]~output at IOOBUF_X21_Y29_N2
-A1L452 = OUTPUT_BUFFER.O(.I(!E1L11), , , , , , , , , , , , , , , , , );
+A1L452 = OUTPUT_BUFFER.O(.I(E1L19), , , , , , , , , , , , , , , , , );
 
 
 --HEX1_D[0] is HEX1_D[0] at PIN_A13
@@ -985,7 +1367,7 @@ HEX1_D[0] = OUTPUT();
 
 
 --A1L454 is HEX1_D[1]~output at IOOBUF_X21_Y29_N9
-A1L454 = OUTPUT_BUFFER.O(.I(!E1L12), , , , , , , , , , , , , , , , , );
+A1L454 = OUTPUT_BUFFER.O(.I(E1L18), , , , , , , , , , , , , , , , , );
 
 
 --HEX1_D[1] is HEX1_D[1] at PIN_B13
@@ -993,7 +1375,7 @@ HEX1_D[1] = OUTPUT();
 
 
 --A1L456 is HEX1_D[2]~output at IOOBUF_X23_Y29_N2
-A1L456 = OUTPUT_BUFFER.O(.I(!E1L12), , , , , , , , , , , , , , , , , );
+A1L456 = OUTPUT_BUFFER.O(.I(E1L17), , , , , , , , , , , , , , , , , );
 
 
 --HEX1_D[2] is HEX1_D[2] at PIN_C13
@@ -1001,7 +1383,7 @@ HEX1_D[2] = OUTPUT();
 
 
 --A1L458 is HEX1_D[3]~output at IOOBUF_X23_Y29_N23
-A1L458 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L458 = OUTPUT_BUFFER.O(.I(E1L16), , , , , , , , , , , , , , , , , );
 
 
 --HEX1_D[3] is HEX1_D[3] at PIN_A14
@@ -1009,7 +1391,7 @@ HEX1_D[3] = OUTPUT();
 
 
 --A1L460 is HEX1_D[4]~output at IOOBUF_X23_Y29_N30
-A1L460 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L460 = OUTPUT_BUFFER.O(.I(E1L15), , , , , , , , , , , , , , , , , );
 
 
 --HEX1_D[4] is HEX1_D[4] at PIN_B14
@@ -1017,7 +1399,7 @@ HEX1_D[4] = OUTPUT();
 
 
 --A1L462 is HEX1_D[5]~output at IOOBUF_X28_Y29_N16
-A1L462 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L462 = OUTPUT_BUFFER.O(.I(E1L14), , , , , , , , , , , , , , , , , );
 
 
 --HEX1_D[5] is HEX1_D[5] at PIN_E14
@@ -1025,7 +1407,7 @@ HEX1_D[5] = OUTPUT();
 
 
 --A1L464 is HEX1_D[6]~output at IOOBUF_X26_Y29_N23
-A1L464 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L464 = OUTPUT_BUFFER.O(.I(!E1L13), , , , , , , , , , , , , , , , , );
 
 
 --HEX1_D[6] is HEX1_D[6] at PIN_A15
@@ -1041,7 +1423,7 @@ HEX1_DP = OUTPUT();
 
 
 --A1L469 is HEX2_D[0]~output at IOOBUF_X32_Y29_N30
-A1L469 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L469 = OUTPUT_BUFFER.O(.I(E1L33), , , , , , , , , , , , , , , , , );
 
 
 --HEX2_D[0] is HEX2_D[0] at PIN_D15
@@ -1049,7 +1431,7 @@ HEX2_D[0] = OUTPUT();
 
 
 --A1L471 is HEX2_D[1]~output at IOOBUF_X30_Y29_N30
-A1L471 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L471 = OUTPUT_BUFFER.O(.I(E1L31), , , , , , , , , , , , , , , , , );
 
 
 --HEX2_D[1] is HEX2_D[1] at PIN_A16
@@ -1057,7 +1439,7 @@ HEX2_D[1] = OUTPUT();
 
 
 --A1L473 is HEX2_D[2]~output at IOOBUF_X28_Y29_N2
-A1L473 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L473 = OUTPUT_BUFFER.O(.I(E1L29), , , , , , , , , , , , , , , , , );
 
 
 --HEX2_D[2] is HEX2_D[2] at PIN_B16
@@ -1065,7 +1447,7 @@ HEX2_D[2] = OUTPUT();
 
 
 --A1L475 is HEX2_D[3]~output at IOOBUF_X30_Y29_N2
-A1L475 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L475 = OUTPUT_BUFFER.O(.I(E1L27), , , , , , , , , , , , , , , , , );
 
 
 --HEX2_D[3] is HEX2_D[3] at PIN_E15
@@ -1073,7 +1455,7 @@ HEX2_D[3] = OUTPUT();
 
 
 --A1L477 is HEX2_D[4]~output at IOOBUF_X30_Y29_N16
-A1L477 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L477 = OUTPUT_BUFFER.O(.I(E1L25), , , , , , , , , , , , , , , , , );
 
 
 --HEX2_D[4] is HEX2_D[4] at PIN_A17
@@ -1081,7 +1463,7 @@ HEX2_D[4] = OUTPUT();
 
 
 --A1L479 is HEX2_D[5]~output at IOOBUF_X30_Y29_N23
-A1L479 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L479 = OUTPUT_BUFFER.O(.I(E1L23), , , , , , , , , , , , , , , , , );
 
 
 --HEX2_D[5] is HEX2_D[5] at PIN_B17
@@ -1089,7 +1471,7 @@ HEX2_D[5] = OUTPUT();
 
 
 --A1L481 is HEX2_D[6]~output at IOOBUF_X37_Y29_N2
-A1L481 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L481 = OUTPUT_BUFFER.O(.I(E1L21), , , , , , , , , , , , , , , , , );
 
 
 --HEX2_D[6] is HEX2_D[6] at PIN_F14
@@ -1105,7 +1487,7 @@ HEX2_DP = OUTPUT();
 
 
 --A1L486 is HEX3_D[0]~output at IOOBUF_X32_Y29_N23
-A1L486 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L486 = OUTPUT_BUFFER.O(.I(E1L47), , , , , , , , , , , , , , , , , );
 
 
 --HEX3_D[0] is HEX3_D[0] at PIN_B18
@@ -1113,7 +1495,7 @@ HEX3_D[0] = OUTPUT();
 
 
 --A1L488 is HEX3_D[1]~output at IOOBUF_X39_Y29_N16
-A1L488 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L488 = OUTPUT_BUFFER.O(.I(E1L45), , , , , , , , , , , , , , , , , );
 
 
 --HEX3_D[1] is HEX3_D[1] at PIN_F15
@@ -1121,7 +1503,7 @@ HEX3_D[1] = OUTPUT();
 
 
 --A1L490 is HEX3_D[2]~output at IOOBUF_X32_Y29_N9
-A1L490 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L490 = OUTPUT_BUFFER.O(.I(E1L43), , , , , , , , , , , , , , , , , );
 
 
 --HEX3_D[2] is HEX3_D[2] at PIN_A19
@@ -1129,7 +1511,7 @@ HEX3_D[2] = OUTPUT();
 
 
 --A1L492 is HEX3_D[3]~output at IOOBUF_X32_Y29_N2
-A1L492 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L492 = OUTPUT_BUFFER.O(.I(E1L41), , , , , , , , , , , , , , , , , );
 
 
 --HEX3_D[3] is HEX3_D[3] at PIN_B19
@@ -1137,7 +1519,7 @@ HEX3_D[3] = OUTPUT();
 
 
 --A1L494 is HEX3_D[4]~output at IOOBUF_X37_Y29_N23
-A1L494 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L494 = OUTPUT_BUFFER.O(.I(E1L39), , , , , , , , , , , , , , , , , );
 
 
 --HEX3_D[4] is HEX3_D[4] at PIN_C19
@@ -1145,7 +1527,7 @@ HEX3_D[4] = OUTPUT();
 
 
 --A1L496 is HEX3_D[5]~output at IOOBUF_X37_Y29_N30
-A1L496 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L496 = OUTPUT_BUFFER.O(.I(E1L37), , , , , , , , , , , , , , , , , );
 
 
 --HEX3_D[5] is HEX3_D[5] at PIN_D19
@@ -1153,7 +1535,7 @@ HEX3_D[5] = OUTPUT();
 
 
 --A1L498 is HEX3_D[6]~output at IOOBUF_X39_Y29_N30
-A1L498 = OUTPUT_BUFFER.O(.I(E1_WideNor0), , , , , , , , , , , , , , , , , );
+A1L498 = OUTPUT_BUFFER.O(.I(E1L35), , , , , , , , , , , , , , , , , );
 
 
 --HEX3_D[6] is HEX3_D[6] at PIN_G15
@@ -2481,35 +2863,27 @@ SW[9] = INPUT();
 
 
 
---C1L71 is ps2:inst|old_value_reg[9]~0clkctrl at CLKCTRL_G7
-C1L71 = cycloneiii_clkctrl(.INCLK[0] = C1L70) WITH (clock_type = "Global Clock", ena_register_mode = "none");
+--C1L107 is ps2:inst|old_value_reg[9]~1clkctrl at CLKCTRL_G13
+C1L107 = cycloneiii_clkctrl(.INCLK[0] = C1L106) WITH (clock_type = "Global Clock", ena_register_mode = "none");
 
 
---C1L48 is ps2:inst|hex_code[4]~1clkctrl at CLKCTRL_G6
-C1L48 = cycloneiii_clkctrl(.INCLK[0] = C1L47) WITH (clock_type = "Global Clock", ena_register_mode = "none");
+--C1L76 is ps2:inst|hex_code[15]~3clkctrl at CLKCTRL_G11
+C1L76 = cycloneiii_clkctrl(.INCLK[0] = C1L75) WITH (clock_type = "Global Clock", ena_register_mode = "none");
 
 
 --A1L12 is CLOCK_50~inputclkctrl at CLKCTRL_G9
 A1L12 = cycloneiii_clkctrl(.INCLK[0] = A1L11) WITH (clock_type = "Global Clock", ena_register_mode = "none");
 
 
---C1L22 is ps2:inst|buffer_reg[3]~feeder at LCCOMB_X40_Y16_N28
-C1L22 = C1L9;
+--C1L126 is ps2:inst|ps2clk_reg~feeder at LCCOMB_X23_Y26_N10
+C1L126 = D1_out_reg;
 
 
---C1L26 is ps2:inst|buffer_reg[5]~feeder at LCCOMB_X40_Y16_N18
-C1L26 = C1L15;
+--D1L14 is ps2:inst|deb:deb_inst|ff_reg[1]~feeder at LCCOMB_X30_Y26_N4
+D1L14 = D1_ff_reg[0];
 
 
---C1L24 is ps2:inst|buffer_reg[4]~feeder at LCCOMB_X40_Y16_N16
-C1L24 = C1L16;
-
-
---C1L20 is ps2:inst|buffer_reg[2]~feeder at LCCOMB_X40_Y16_N20
-C1L20 = C1L17;
-
-
---D1L11 is ps2:inst|deb:deb_inst|ff_reg[1]~feeder at LCCOMB_X38_Y16_N28
-D1L11 = D1_ff_reg[0];
+--D1L12 is ps2:inst|deb:deb_inst|ff_reg[0]~feeder at LCCOMB_X30_Y26_N12
+D1L12 = A1L554;
 
 

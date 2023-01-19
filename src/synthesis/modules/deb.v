@@ -1,4 +1,4 @@
-module deb #(parameter WIDTH = 3)
+module deb #(parameter WIDTH = 4)
            (input clk,
              input rst_n,
              input in,
