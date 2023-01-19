@@ -4,8 +4,12 @@ import uvm_pkg::*;
 class ps2_item extends uvm_sequence_item;
 
 	rand bit ps2clk;
-	randc bit ps2data;
-	bit [7:0] code;
+	rand bit ps2data;
+	bit [15:0] code;
+
+	constraint c1 {
+		ps2clk dist {1:=50, 2:=50 };
+	}
 	
 	`uvm_object_utils_begin(ps2_item)
 		`uvm_field_int(ps2clk, UVM_DEFAULT)
@@ -19,7 +23,7 @@ class ps2_item extends uvm_sequence_item;
 	
 	virtual function string my_print();
 		return $sformatf(
-			"ps2clk = %1b ps2data = %1b code = %8b",
+			"ps2clk = %1b ps2data = %1b code = %16b",
 			ps2clk, ps2data, code
 		);
 	endfunction
@@ -50,7 +54,7 @@ class generator extends uvm_sequence;
 	
 endclass
 
-class driver extends uvm_driver #(reg8_item);
+class driver extends uvm_driver #(ps2_item);
 	
 	`uvm_component_utils(driver)
 	
@@ -69,7 +73,7 @@ class driver extends uvm_driver #(reg8_item);
 	virtual task run_phase(uvm_phase phase);
 		super.run_phase(phase);
 		forever begin
-			reg8_item item;
+			ps2_item item;
 			seq_item_port.get_next_item(item);
 			`uvm_info("Driver", $sformatf("%s", item.my_print()), UVM_LOW)
 			vif.ps2clk <= item.ps2clk;
@@ -103,7 +107,7 @@ class monitor extends uvm_monitor;
 		super.run_phase(phase);
 		@(posedge vif.clk);
 		forever begin
-			reg8_item item = ps2_item::type_id::create("item");
+			ps2_item item = ps2_item::type_id::create("item");
 			@(posedge vif.clk);
 			item.ps2clk = vif.ps2clk;
 			item.ps2data = vif.ps2data;
@@ -156,29 +160,89 @@ class scoreboard extends uvm_scoreboard;
 		mon_analysis_imp = new("mon_analysis_imp", this);
 	endfunction
 	
-	bit [7:0] ps2 = 8'h00;
+	bit [15:0] ps2 = 15'h0000;
 	
 	virtual function write(ps2_item item);
+		ps2 = checkPS2(ps2, item);
 		if (ps2 == item.code)
 			`uvm_info("Scoreboard", $sformatf("PASS!"), UVM_LOW)
 		else
-			`uvm_error("Scoreboard", $sformatf("FAIL! expected = %8b, got = %8b", ps2, item.code))
-		
+			`uvm_error("Scoreboard", $sformatf("FAIL! expected = %16b, got = %16b", ps2, item.code))
+
 		//tu nam ide logika ps2
-
-
-
-
-
-
-
-
-
-
-        //ne znamo sta je
-
-
 	endfunction
+
+	function bit[15:0] checkPS2(bit[15:0] ps2, ps2_item item);
+	
+		reg [9:0] buffer_reg = 10'h000;
+		reg [9:0] old_value_reg = 10'd0;
+		reg state_reg = 1'b0;
+		reg [3:0] cnt_reg = 4'b1001;
+		reg ps2clk_reg, ps2clk_next;
+		
+		reg[15:0] hex_code_reg;
+		reg neg_edge;
+		reg[7:0] data_in; //trenutni kod
+		reg[3:0]  i;
+		reg parity;
+
+		ps2clk_reg = 1'b0;
+		ps2clk_next = item.ps2clk;
+		neg_edge = ps2clk_reg & ~ps2clk_next;
+		data_in = buffer_reg[8:1];
+
+		
+		if (neg_edge) begin
+			ps2clk_reg = ps2clk_next;
+			ps2clk_next = item.ps2clk;
+			case (state_reg)
+				1'b0: begin
+					if (neg_edge) begin
+						if (item.ps2data == 1'b0) begin
+							old_value_reg = buffer_reg;
+							cnt_reg = 4'b1001;
+							state_reg = 1'b1;
+							parity = 1'b0;
+						end else state_reg =  1'b0;
+					end
+				end
+					
+				1'b1: begin
+					if(neg_edge) begin
+						buffer_reg[4'b1001 - cnt_reg] = item.ps2data;
+						cnt_reg = cnt_reg - 1;
+					end
+					if (cnt_reg == 4'h0) begin
+						for (i = 0 ; i < 8; i = i + 1 ) begin
+							parity = parity ^ buffer_reg[i];
+						end
+					
+						if (parity == buffer_reg[9]) begin
+
+							if  (buffer_reg[7:0] == old_value_reg[7:0]) begin
+								hex_code_reg = {8'h00, buffer_reg[7:0]};  //kad se dugo drzi od 1B
+							end else if((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] == 8'hf0)) begin
+								hex_code_reg = hex_code_reg; //Kad se otpusti od dva da preskoci takt
+							end else if  (buffer_reg[7:0] == 8'hf0) begin
+								hex_code_reg =  {buffer_reg[7:0], old_value_reg[7:0]}; //kad se optusti od 1B
+							end else if  (buffer_reg[7:0] == 8'he0) begin
+								// ceka 1 takt kad dodje 1B od koda od 2B
+							end else if ((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] != 8'hf0)) begin
+								hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi 2B koda od 2B a nije otpusni
+							end else if (old_value_reg[7:0] == 8'hf0) begin
+								hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi B koda od 2B otpusni
+							end
+							
+						end
+						state_reg =  1'b0;
+					end
+				end
+					
+			endcase  
+		end
+		return hex_code_reg;
+	endfunction
+
 	
 endclass
 
@@ -221,7 +285,7 @@ class test extends uvm_test;
 	
 	virtual function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
-		if (!uvm_config_db#(virtual reg8_if)::get(this, "", "ps2_vif", vif))
+		if (!uvm_config_db#(virtual ps2_if)::get(this, "", "ps2_vif", vif))
 			`uvm_fatal("Test", "No interface.")
 		e0 = env::type_id::create("e0", this);
 		g0 = generator::type_id::create("g0");
@@ -250,7 +314,7 @@ interface ps2_if (
 	logic rst_n;
 	logic ps2clk;
     logic ps2data;
-    logic [7:0] out;
+    logic [15:0] code;
 
 endinterface
 
@@ -267,7 +331,7 @@ module testbench;
         .ps2clk(dut_if.ps2clk),
         .ps2data(dut_if.ps2data),
         .code(dut_if.code)
-    )
+    );
 
     initial begin
 		clk = 0;

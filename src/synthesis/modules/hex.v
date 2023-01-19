@@ -2,14 +2,6 @@ module hex(input [15:0] in,
            output reg [27:0] out);
     
     always @(*) begin
-<<<<<<< Updated upstream
-        case (in)
-            16'h001D: out = ~28'h000035e;
-            16'hF01d: out =  ~28'h00000f1;
-            16'h0000: out =  ~28'h0000000;
-            default: out =  ~28'hfffffff;
-        endcase
-=======
         case (in[3:0])
             4'b0000: out[6:0] = ~7'h3F;
             4'b0001: out[6:0] = ~7'h06;
@@ -82,7 +74,6 @@ module hex(input [15:0] in,
             4'b1110: out[27:21] = ~7'h79;
             4'b1111: out[27:21] = ~7'h71;
         endcase
->>>>>>> Stashed changes
     end
     
 endmodule
