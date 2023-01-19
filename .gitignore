@@ -13,3 +13,11 @@ _deps
 *.cdb
 *.qmsg
 *.bpm
+*.qmsg
+*.db_info
+*.rpt
+*.summary
+*.qmsg
+*.chg
+*.log
+*.db_info

@@ -13,14 +13,14 @@ class ps2_item extends uvm_sequence_item;
 		`uvm_field_int(code, UVM_DEFAULT)
 	`uvm_object_utils_end
 	
-	function new(string name = "reg8_item");
+	function new(string name = "ps2_item");
 		super.new(name);
 	endfunction
 	
 	virtual function string my_print();
 		return $sformatf(
-			"ld = %1b inc = %1b in = %8b out = %8b",
-			ld, inc, in, out
+			"ps2clk = %1b ps2data = %1b code = %8b",
+			ps2clk, ps2data, code
 		);
 	endfunction
 
