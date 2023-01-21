@@ -3,13 +3,9 @@ import uvm_pkg::*;
 
 class ps2_item extends uvm_sequence_item;
 
-	rand bit ps2clk;
+	randc bit ps2clk;
 	rand bit ps2data;
 	bit [15:0] code;
-
-	constraint c1 {
-		ps2clk dist {1:=50, 2:=50 };
-	}
 	
 	`uvm_object_utils_begin(ps2_item)
 		`uvm_field_int(ps2clk, UVM_DEFAULT)
@@ -38,7 +34,7 @@ class generator extends uvm_sequence;
 		super.new(name);
 	endfunction
 	
-	int num = 20;
+	int num = 150;
 	
 	virtual task body();
 		for (int i = 0; i < num; i++) begin
@@ -47,7 +43,7 @@ class generator extends uvm_sequence;
 			start_item(item);
 			item.randomize();
 			`uvm_info("Generator", $sformatf("Item %0d/%0d created", i + 1, num), UVM_LOW)
-			item.print();
+			// item.print();
 			finish_item(item);
 		end
 	endtask
@@ -161,38 +157,50 @@ class scoreboard extends uvm_scoreboard;
 	endfunction
 	
 	bit [15:0] ps2 = 15'h0000;
+	reg[31:0] count = 32'h00000000;
 	
+	reg [9:0] buffer_reg = 10'h000;;
+	reg [9:0] old_value_reg = 10'd0;;
+	reg state_reg = 1'b0;;
+	reg [3:0] cnt_reg = 4'b1001;;
+	reg ps2clk_reg = 1'b1;
+	reg ps2clk_next;
+	
+	reg[15:0] hex_code_reg = 16'h0000;
+	reg neg_edge;
+	reg[7:0] data_in; //trenutni kod
+	reg[3:0]  i;
+	reg parity;
+
 	virtual function write(ps2_item item);
 		ps2 = checkPS2(ps2, item);
-		if (ps2 == item.code)
-			`uvm_info("Scoreboard", $sformatf("PASS!"), UVM_LOW)
-		else
-			`uvm_error("Scoreboard", $sformatf("FAIL! expected = %16b, got = %16b", ps2, item.code))
+		// if (count == 32'h10) begin
+			if (ps2 == item.code)
+				`uvm_info("Scoreboard", $sformatf("PASS!"), UVM_LOW)
+			else
+				`uvm_error("Scoreboard", $sformatf("FAIL! expected = %16b, got = %16b", ps2, item.code))
+			count = 32'h0;
+		// end
 
 		//tu nam ide logika ps2
 	endfunction
 
-	function bit[15:0] checkPS2(bit[15:0] ps2, ps2_item item);
-	
-		reg [9:0] buffer_reg = 10'h000;
-		reg [9:0] old_value_reg = 10'd0;
-		reg state_reg = 1'b0;
-		reg [3:0] cnt_reg = 4'b1001;
-		reg ps2clk_reg, ps2clk_next;
 		
-		reg[15:0] hex_code_reg;
-		reg neg_edge;
-		reg[7:0] data_in; //trenutni kod
-		reg[3:0]  i;
-		reg parity;
 
-		ps2clk_reg = 1'b0;
+		// buffer_reg = 10'h000;
+		// old_value_reg = 10'd0;
+		// state_reg = 1'b0;
+		// cnt_reg = 4'b1001;	
+		// ps2clk_reg = 1'b1;
+		
+	function bit[15:0] checkPS2(bit[15:0] ps2, ps2_item item);
 		ps2clk_next = item.ps2clk;
 		neg_edge = ps2clk_reg & ~ps2clk_next;
 		data_in = buffer_reg[8:1];
-
-		
+		// `uvm_info("Negedge", $sformatf("Radis li ti nestpo %0d, %0d, %0d", neg_edge, ps2clk_reg, ps2clk_next), UVM_LOW)
 		if (neg_edge) begin
+			// `uvm_info("Allo", $sformatf("Radis li ti nestpo %0d a bita je %0d", count, cnt_reg), UVM_LOW)
+			count = count + 32'h1;
 			ps2clk_reg = ps2clk_next;
 			ps2clk_next = item.ps2clk;
 			case (state_reg)
@@ -216,30 +224,35 @@ class scoreboard extends uvm_scoreboard;
 						for (i = 0 ; i < 8; i = i + 1 ) begin
 							parity = parity ^ buffer_reg[i];
 						end
+						`uvm_info("Made", $sformatf("Item %0d created", hex_code_reg), UVM_LOW)
+
 					
 						if (parity == buffer_reg[9]) begin
-
-							if  (buffer_reg[7:0] == old_value_reg[7:0]) begin
-								hex_code_reg = {8'h00, buffer_reg[7:0]};  //kad se dugo drzi od 1B
-							end else if((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] == 8'hf0)) begin
-								hex_code_reg = hex_code_reg; //Kad se otpusti od dva da preskoci takt
-							end else if  (buffer_reg[7:0] == 8'hf0) begin
-								hex_code_reg =  {buffer_reg[7:0], old_value_reg[7:0]}; //kad se optusti od 1B
-							end else if  (buffer_reg[7:0] == 8'he0) begin
-								// ceka 1 takt kad dodje 1B od koda od 2B
-							end else if ((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] != 8'hf0)) begin
-								hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi 2B koda od 2B a nije otpusni
-							end else if (old_value_reg[7:0] == 8'hf0) begin
-								hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi B koda od 2B otpusni
-							end
-							
+							`uvm_info("Parity", $sformatf("Item %10b created", buffer_reg), UVM_LOW)
+							hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]};
+						// 	if  (buffer_reg[7:0] == old_value_reg[7:0]) begin
+						// 		hex_code_reg = {8'h00, buffer_reg[7:0]};  //kad se dugo drzi od 1B
+						// 	end else if((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] == 8'hf0)) begin
+						// 		hex_code_reg = hex_code_reg; //Kad se otpusti od dva da preskoci takt
+						// 	end else if  (buffer_reg[7:0] == 8'hf0) begin
+						// 		hex_code_reg =  {buffer_reg[7:0], old_value_reg[7:0]}; //kad se optusti od 1B
+						// 	end else if  (buffer_reg[7:0] == 8'he0) begin
+						// 		// ceka 1 takt kad dodje 1B od koda od 2B
+						// 	end else if ((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] != 8'hf0)) begin
+						// 		hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi 2B koda od 2B a nije otpusni
+						// 	end else if (old_value_reg[7:0] == 8'hf0) begin
+						// 		hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi B koda od 2B otpusni
+						// 	end
+						// 								`uvm_info("ParityEnd", $sformatf("Item %0d created", hex_code_reg), UVM_LOW)
 						end
 						state_reg =  1'b0;
 					end
 				end
 					
 			endcase  
+			`uvm_info("Check", $sformatf("Item %0d created", hex_code_reg), UVM_LOW)
 		end
+		ps2clk_reg = ps2clk_next;
 		return hex_code_reg;
 	endfunction
 
@@ -292,7 +305,7 @@ class test extends uvm_test;
 	endfunction
 	
 	virtual function void end_of_elaboration_phase(uvm_phase phase);
-		uvm_top.print_topology();
+		// uvm_top.print_topology();
 	endfunction
 	
 	virtual task run_phase(uvm_phase phase);
