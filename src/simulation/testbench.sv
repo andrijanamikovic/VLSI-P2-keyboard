@@ -252,8 +252,8 @@ class scoreboard extends uvm_scoreboard;
 				1'b0: begin
 					//if (neg_edge) begin
 						if (item.ps2data == 1'b0) begin
-							// old_value_reg = buffer_reg;
-							if (old_value_reg[7:0] != 8'he0 && old_value_reg[7:0] != 8'hf0) old_value_reg = 10'h000;
+							old_value_reg = buffer_reg;
+							//if (old_value_reg[7:0] != 8'he0 && old_value_reg[7:0] != 8'hf0) old_value_reg = 10'h000;
 							buffer_reg = 10'h000;
 							cnt_reg = 4'b1001;
 							state_reg = 1'b1;

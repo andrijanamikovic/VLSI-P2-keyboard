@@ -55,13 +55,14 @@ module ps2(
             idle: begin
                // if (neg_edge == 1'b1) begin
                     if (ps2data == 1'b0) begin
-                        if (buffer_reg == 8'hf0) begin
-                            old_value_reg <= old_value_next;
-                            old_value_next <= buffer_reg;
-                        end else begin
-                            old_value_reg <= old_value_next;
-                            old_value_next <= 8'h00;
-                        end
+                        // hex_code_reg = {buffer_reg[7:0], buffer_reg[7:0]};
+                        // if (buffer_reg == 8'hf0) begin
+                        old_value_reg <= old_value_next;
+                        old_value_next <= buffer_reg;
+                        // end else begin
+                        //     old_value_reg <= old_value_next;
+                        //     old_value_next <= 8'h00;
+                        // end
                         
                         cnt_next = 4'b1001;
                         state_next = read;
@@ -78,7 +79,6 @@ module ps2(
                 if(neg_edge == 1'b1) begin
                     buffer_next[4'b1001 - cnt_reg] = ps2data;
                     cnt_next = cnt_reg - 1;
-                   // hex_code_next = {cnt_reg, 12'hfff};
                 end
                 
                 if (cnt_reg == 4'h0) begin
@@ -89,10 +89,10 @@ module ps2(
                     end
                    
                     if (parity == buffer_next[8]) begin
-                        hex_code_next = {8'h11, buffer_next[7:0]};
+                       // hex_code_next = {8'h11, buffer_next[7:0]};
                         if (old_value_next[7:0] == 8'h00) begin
                             hex_code_next = {8'h00, buffer_next[7:0]};  //kad se jednom pritisne od 1
-                            buffer_next = 8'h00;
+                            //buffer_next = 8'h00;
                         end
                         else if (buffer_next[7:0] == old_value_next[7:0]) begin
                             hex_code_next = {8'h00, buffer_next[7:0]};  //kad se dugo drzi od 1B
@@ -101,6 +101,7 @@ module ps2(
                         end else if (buffer_next[7:0] == 8'hf0) begin
                             hex_code_next = {buffer_next[7:0], old_value_next[7:0]}; //kad se optusti od 1B
                          end else if (buffer_next[7:0] == 8'he0) begin
+                             hex_code_reg = hex_code_next;
                             // ceka 1 takt kad dodje 1B od koda od 2B
                          end else if ((old_value_next[7:0] == 8'he0) && (buffer_next[7:0] != 8'hf0)) begin
                              hex_code_next = {old_value_next[7:0], buffer_next[7:0]}; //Drugi 2B koda od 2B a nije otpusni
