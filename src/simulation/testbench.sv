@@ -3,13 +3,8 @@ import uvm_pkg::*;
 
 class ps2_item extends uvm_sequence_item;
 
-<<<<<<< Updated upstream
-	randc bit ps2clk;
-	rand bit ps2data;
-=======
 	bit ps2clk;
 	rand bit[7:0] ps2data;
->>>>>>> Stashed changes
 	bit [15:0] code;
 
 	// constraint c4 {
@@ -17,7 +12,7 @@ class ps2_item extends uvm_sequence_item;
 	// }
 	
 	`uvm_object_utils_begin(ps2_item)
-		`uvm_field_int(ps2clk, UVM_DEFAULT)
+		// `uvm_field_int(ps2clk, UVM_DEFAULT)
 		`uvm_field_int(ps2data, UVM_DEFAULT)
 		`uvm_field_int(code, UVM_DEFAULT)
 	`uvm_object_utils_end
@@ -43,11 +38,7 @@ class generator extends uvm_sequence;
 		super.new(name);
 	endfunction
 	
-<<<<<<< Updated upstream
-	int num = 150;
-=======
 	int num = 10;
->>>>>>> Stashed changes
 	
 	virtual task body();
 		for (int i = 0; i < num; i++) begin
@@ -90,12 +81,6 @@ class driver extends uvm_driver #(ps2_item);
 		forever begin
 			ps2_item item;
 			seq_item_port.get_next_item(item);
-<<<<<<< Updated upstream
-			`uvm_info("Driver", $sformatf("%s", item.my_print()), UVM_LOW)
-			vif.ps2clk <= item.ps2clk;
-			vif.ps2data <= item.ps2data;
-			@(posedge vif.clk);
-=======
 			// `uvm_info("Driver", $sformatf("%s", item.my_print()), UVM_LOW)
 
 			`uvm_info("DriverTest", $sformatf("ps2data %0b ", item.ps2data), UVM_LOW)
@@ -123,7 +108,6 @@ class driver extends uvm_driver #(ps2_item);
 			//vif.ps2data <= item.ps2data;
 			
 
->>>>>>> Stashed changes
 			seq_item_port.item_done();
 		end
 	endtask
@@ -157,7 +141,8 @@ class monitor extends uvm_monitor;
 			item.ps2clk = vif.ps2clk;
 			item.ps2data = vif.ps2data;
 			item.code = vif.code;
-			`uvm_info("Monitor", $sformatf("%s", item.my_print()), UVM_LOW)
+									`uvm_info("MonitorTest", $sformatf("ps2data %0d ", item.ps2data), UVM_LOW)
+			// `uvm_info("Monitor", $sformatf("%s", item.my_print()), UVM_LOW)
 			mon_analysis_port.write(item);
 		end
 	endtask
@@ -212,7 +197,7 @@ class scoreboard extends uvm_scoreboard;
 	reg [9:0] old_value_reg = 10'd0;;
 	reg state_reg = 1'b0;
 	reg [3:0] cnt_reg = 4'b1001;;
-	reg ps2clk_reg = 1'b1;
+	reg ps2clk_reg = 1'b0;
 	reg ps2clk_next;
 	
 	reg[15:0] hex_code_reg = 16'h0000;
@@ -225,7 +210,7 @@ class scoreboard extends uvm_scoreboard;
 		ps2 = checkPS2(ps2, item);
 		// if (count == 32'h10) begin
 			if (ps2 == item.code)
-				`uvm_info("Scoreboard", $sformatf("PASS!"), UVM_LOW)
+				`uvm_info("Scoreboard", $sformatf("PASS! expected = %16b, got = %16b", ps2, item.code), UVM_LOW)
 			else
 				`uvm_error("Scoreboard", $sformatf("FAIL! expected = %16b, got = %16b", ps2, item.code))
 			count = 32'h0;
@@ -248,7 +233,7 @@ class scoreboard extends uvm_scoreboard;
 		data_in = buffer_reg[8:1];
 		// `uvm_info("Negedge", $sformatf("Radis li ti nestpo %0d, %0d, %0d", neg_edge, ps2clk_reg, ps2clk_next), UVM_LOW)
 		if (neg_edge) begin
-			// `uvm_info("Allo", $sformatf("Radis li ti nestpo %0d a bita je %0d", count, cnt_reg), UVM_LOW)
+			// `uvm_info("Allo", $sformatf("Radis li ti nestpo %0d a bita je %0d", item.ps2data, item.ps2clk), UVM_LOW)
 			count = count + 32'h1;
 			ps2clk_reg = ps2clk_next;
 			ps2clk_next = item.ps2clk;
@@ -278,20 +263,25 @@ class scoreboard extends uvm_scoreboard;
 					
 						if (parity == buffer_reg[9]) begin
 							`uvm_info("Parity", $sformatf("Item %10b created", buffer_reg), UVM_LOW)
-							hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]};
-						// 	if  (buffer_reg[7:0] == old_value_reg[7:0]) begin
-						// 		hex_code_reg = {8'h00, buffer_reg[7:0]};  //kad se dugo drzi od 1B
-						// 	end else if((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] == 8'hf0)) begin
-						// 		hex_code_reg = hex_code_reg; //Kad se otpusti od dva da preskoci takt
-						// 	end else if  (buffer_reg[7:0] == 8'hf0) begin
-						// 		hex_code_reg =  {buffer_reg[7:0], old_value_reg[7:0]}; //kad se optusti od 1B
-						// 	end else if  (buffer_reg[7:0] == 8'he0) begin
-						// 		// ceka 1 takt kad dodje 1B od koda od 2B
-						// 	end else if ((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] != 8'hf0)) begin
-						// 		hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi 2B koda od 2B a nije otpusni
-						// 	end else if (old_value_reg[7:0] == 8'hf0) begin
-						// 		hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi B koda od 2B otpusni
-						// 	end
+							// hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]};
+							if (old_value_reg[7:0] == 8'h00) begin
+								hex_code_reg = {8'h00, buffer_reg[7:0]};  //kad se jednom 1B
+							end else 
+							if  (buffer_reg[7:0] == old_value_reg[7:0]) begin
+								hex_code_reg = {8'h00, buffer_reg[7:0]};  //kad se dugo drzi od 1B
+							end else if((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] == 8'hf0)) begin
+								hex_code_reg = hex_code_reg; //Kad se otpusti od dva da preskoci takt
+							end else if  (buffer_reg[7:0] == 8'hf0) begin
+								hex_code_reg =  {buffer_reg[7:0], old_value_reg[7:0]}; //kad se optusti od 1B
+							end else if  (buffer_reg[7:0] == 8'he0) begin
+								// ceka 1 takt kad dodje 1B od koda od 2B
+							end else if ((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] != 8'hf0)) begin
+								hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi 2B koda od 2B a nije otpusni
+							end else if (old_value_reg[7:0] == 8'hf0) begin
+								hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi B koda od 2B otpusni
+							end
+							old_value_reg = buffer_reg;
+								buffer_reg = 8'h00;
 						// 								`uvm_info("ParityEnd", $sformatf("Item %0d created", hex_code_reg), UVM_LOW)
 						end
 						state_reg =  1'b0;
@@ -362,7 +352,7 @@ class test extends uvm_test;
 		
 		vif.rst_n <= 0;
 		#20 vif.rst_n <= 1;
-		
+
 		g0.start(e0.a0.s0);
 		phase.drop_objection(this);
 	endtask
@@ -370,11 +360,11 @@ class test extends uvm_test;
 endclass
 
 interface ps2_if (
-	input bit clk
+	input bit clk,
+	input bit ps2clk
 );
 
 	logic rst_n;
-	logic ps2clk;
     logic ps2data;
     logic [15:0] code;
 
@@ -382,23 +372,31 @@ endinterface
 
 module testbench;
     reg clk;
+	reg ps2clk;
 
     ps2_if dut_if (
-        .clk(clk)
+        .clk(clk),
+		.ps2clk(ps2clk)
     );
 
-    ps2 dut (
+    ps2 dut(
         .clk(clk),
         .rst_n(dut_if.rst_n),
-        .ps2clk(dut_if.ps2clk),
+        .ps2clk(ps2clk),
         .ps2data(dut_if.ps2data),
         .code(dut_if.code)
     );
 
     initial begin
 		clk = 0;
+		ps2clk = 1;
 		forever begin
-			#10 clk = ~clk;
+			// ps2clk = ~ps2clk;
+			repeat(3) #10 clk = ~clk;
+			ps2clk = ~ps2clk;
+
+			// `uvm_info("Test", $sformatf("ps2clk %0d ", ps2clk), UVM_LOW)
+
 		end
 	end
 
