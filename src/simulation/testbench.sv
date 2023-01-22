@@ -3,9 +3,18 @@ import uvm_pkg::*;
 
 class ps2_item extends uvm_sequence_item;
 
+<<<<<<< Updated upstream
 	randc bit ps2clk;
 	rand bit ps2data;
+=======
+	bit ps2clk;
+	rand bit[7:0] ps2data;
+>>>>>>> Stashed changes
 	bit [15:0] code;
+
+	// constraint c4 {
+	// ps2data dist {0:=0, 1:=70 };
+	// }
 	
 	`uvm_object_utils_begin(ps2_item)
 		`uvm_field_int(ps2clk, UVM_DEFAULT)
@@ -34,7 +43,11 @@ class generator extends uvm_sequence;
 		super.new(name);
 	endfunction
 	
+<<<<<<< Updated upstream
 	int num = 150;
+=======
+	int num = 10;
+>>>>>>> Stashed changes
 	
 	virtual task body();
 		for (int i = 0; i < num; i++) begin
@@ -66,15 +79,51 @@ class driver extends uvm_driver #(ps2_item);
 			`uvm_fatal("Driver", "No interface.")
 	endfunction
 	
+	reg[3:0] i;
+	reg[3:0] j;
+	reg parity;
+	reg zero = 1'b0;
+	reg one = 1'b1;
 	virtual task run_phase(uvm_phase phase);
 		super.run_phase(phase);
+		
 		forever begin
 			ps2_item item;
 			seq_item_port.get_next_item(item);
+<<<<<<< Updated upstream
 			`uvm_info("Driver", $sformatf("%s", item.my_print()), UVM_LOW)
 			vif.ps2clk <= item.ps2clk;
 			vif.ps2data <= item.ps2data;
 			@(posedge vif.clk);
+=======
+			// `uvm_info("Driver", $sformatf("%s", item.my_print()), UVM_LOW)
+
+			`uvm_info("DriverTest", $sformatf("ps2data %0b ", item.ps2data), UVM_LOW)
+			for (i = 0; i < 4'd11 ; i = i + 4'd1) begin
+				@(posedge vif.clk);
+				if (i == 4'd0) begin
+					vif.ps2data <= zero;
+				end else if (i == 4'd10) begin
+					vif.ps2data <= one;
+				end else if (i == 4'd9) begin
+					for (j = 0; j < 4'd8; j = j + 4'd1) begin
+						parity = parity ^ item.ps2data[j];
+					end
+					vif.ps2data <= parity;
+				end else begin
+					vif.ps2data <= item.ps2data[i-4'd1];
+				end
+				//`uvm_info("BitPoBit", $sformatf("Bitovi %0b ", vif.ps2data), UVM_LOW)
+			end
+			parity = 0;
+			//@(posedge vif.clk);
+			// vif.ps2clk <= item.ps2clk;
+			// item.ps2clk <= vif.ps2clk;
+			// @(negedge vif.ps2clk);
+			//vif.ps2data <= item.ps2data;
+			
+
+>>>>>>> Stashed changes
 			seq_item_port.item_done();
 		end
 	endtask
@@ -161,7 +210,7 @@ class scoreboard extends uvm_scoreboard;
 	
 	reg [9:0] buffer_reg = 10'h000;;
 	reg [9:0] old_value_reg = 10'd0;;
-	reg state_reg = 1'b0;;
+	reg state_reg = 1'b0;
 	reg [3:0] cnt_reg = 4'b1001;;
 	reg ps2clk_reg = 1'b1;
 	reg ps2clk_next;
