@@ -78,6 +78,7 @@ module ps2(
                 if(neg_edge == 1'b1) begin
                     buffer_next[4'b1001 - cnt_reg] = ps2data;
                     cnt_next = cnt_reg - 1;
+                   // hex_code_next = {cnt_reg, 12'hfff};
                 end
                 
                 if (cnt_reg == 4'h0) begin

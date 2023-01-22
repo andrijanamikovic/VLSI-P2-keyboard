@@ -9,3 +9,15 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+*.hdb
+*.cdb
+*.qmsg
+*.bpm
+*.qmsg
+*.db_info
+*.rpt
+*.summary
+*.qmsg
+*.chg
+*.log
+*.db_info
