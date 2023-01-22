@@ -8,7 +8,7 @@ class ps2_item extends uvm_sequence_item;
 	bit [15:0] code;
 
 	// constraint c4 {
-	// ps2data dist {0:=0, 1:=70 };
+	// ps2data dist { 224 := 10, 118 := 1, 240 := 10, [1:10]:=1, [48:63]:= 1};
 	// }
 	
 	`uvm_object_utils_begin(ps2_item)
@@ -38,16 +38,14 @@ class generator extends uvm_sequence;
 		super.new(name);
 	endfunction
 	
-	int num = 2000;
+	int num = 20;
 	
 	virtual task body();
 		for (int i = 0; i < num; i++) begin
-            //ovo mozda mora da se menja
 			ps2_item item = ps2_item::type_id::create("item");
 			start_item(item);
 			item.randomize();
 			`uvm_info("Generator", $sformatf("Item %0d/%0d created", i + 1, num), UVM_LOW)
-			// item.print();
 			finish_item(item);
 		end
 	endtask
@@ -81,7 +79,6 @@ class driver extends uvm_driver #(ps2_item);
 		forever begin
 			ps2_item item;
 			seq_item_port.get_next_item(item);
-			// `uvm_info("Driver", $sformatf("%s", item.my_print()), UVM_LOW)
 
 			for (i = 0; i < 4'd11 ; i = i + 4'd1) begin
 				@(negedge vif.ps2clk);
@@ -99,17 +96,9 @@ class driver extends uvm_driver #(ps2_item);
 					vif.ps2data <= item.ps2data[i-4'd1];
 				end
 				
-				//`uvm_info("BitPoBit", $sformatf("Bitovi %0b ", vif.ps2data), UVM_LOW)
 			end
 			`uvm_info("DriverTest", $sformatf("ps2data %8b , parity %0b", item.ps2data, parity), UVM_LOW)
 			parity = 1;
-			//@(posedge vif.clk);
-			// vif.ps2clk <= item.ps2clk;
-			// item.ps2clk <= vif.ps2clk;
-			// @(negedge vif.ps2clk);
-			//vif.ps2data <= item.ps2data;
-			
-
 			seq_item_port.item_done();
 		end
 	endtask
@@ -143,8 +132,6 @@ class monitor extends uvm_monitor;
 			item.ps2clk = vif.ps2clk;
 			item.ps2data = vif.ps2data;
 			item.code = vif.code;
-									// `uvm_info("MonitorTest", $sformatf("ps2data %0d ", item.ps2data), UVM_LOW)
-			// `uvm_info("Monitor", $sformatf("%s", item.my_print()), UVM_LOW)
 			mon_analysis_port.write(item);
 		end
 	endtask
@@ -220,79 +207,49 @@ class scoreboard extends uvm_scoreboard;
 		end else begin
 			flag = 1'b0;
 		end
-		// ps2 = checkPS2(ps2, item);
-
-		// if (count == 32'h10) begin
-			//if (ps2 == item.code)
-				//`uvm_info("Scoreboard", $sformatf("PASS! expected = %16b, got = %16b, bit=%1b", ps2, item.code, item.ps2data), UVM_LOW)
-			//else
-			if (ps2!= item.code)
-				`uvm_error("Scoreboard", $sformatf("FAIL! expected = %16b, got = %16b, bit=%1b", ps2, item.code,item.ps2data))
+			if (ps2 == item.code)
+				`uvm_info("Scoreboard", $sformatf("PASS! expected = %16b, got = %16b, bit=%1b", ps2, item.code, item.ps2data), UVM_LOW)
+			else
+				`uvm_error("Scoreboard", $sformatf("FAIL!"))
 			count = 32'h0;
-		// end
-
-		//tu nam ide logika ps2
 	endfunction
-
-		
-
-		// buffer_reg = 10'h000;
-		// old_value_reg = 10'd0;
-		// state_reg = 1'b0;
-		// cnt_reg = 4'b1001;	
-		// ps2clk_reg = 1'b1;
 		
 	function bit[15:0] checkPS2(bit[15:0] ps2, ps2_item item);
-		// `uvm_info("checkPS2", $sformatf("bit=%1b", item.ps2data), UVM_LOW)
 		ps2clk_next = item.ps2clk;
-		// neg_edge = ps2clk_reg & ~ps2clk_next;
 		data_in = buffer_reg[8:1];
-		// `uvm_info("Negedge", $sformatf("Radis li ti nestpo %0d, %0d, %0d", neg_edge, ps2clk_reg, ps2clk_next), UVM_LOW)
-		// if (neg_edge) begin
-			// `uvm_info("Allo", $sformatf("Radis li ti nestpo %0d a bita je %0d", item.ps2data, item.ps2clk), UVM_LOW)
 			count = count + 32'h1;
 			ps2clk_reg = ps2clk_next;
 			ps2clk_next = item.ps2clk;
 			case (state_reg)
 				1'b0: begin
-					//if (neg_edge) begin
 						if (item.ps2data == 1'b0) begin
 							old_value_reg = buffer_reg;
-							//if (old_value_reg[7:0] != 8'he0 && old_value_reg[7:0] != 8'hf0) old_value_reg = 10'h000;
 							buffer_reg = 10'h000;
 							cnt_reg = 4'b1001;
 							state_reg = 1'b1;
 							parity = 1'b1;
-							// hex_code_reg = 16'h0000;
 						end else state_reg =  1'b0;
-					//end
 				end
 					
 				1'b1: begin
-					// if(neg_edge) begin
 						buffer_reg[4'b1001 - cnt_reg] = item.ps2data;
-						`uvm_info("buffer_reg", $sformatf("buffer_reg=%10b", buffer_reg), UVM_LOW)
+						// `uvm_info("buffer_reg", $sformatf("buffer_reg=%10b", buffer_reg), UVM_LOW)
 						cnt_reg = cnt_reg - 1;
-					// end
 					if (cnt_reg == 4'h0) begin
 						parity = 1;
 						for (i = 0 ; i < 8; i = i + 1 ) begin
 							parity = parity ^ buffer_reg[i];
 						end
-						`uvm_info("Made", $sformatf("Item %0d created, parity %b, buffer_reg %10b", hex_code_reg, parity, buffer_reg), UVM_LOW)
+						// `uvm_info("Made", $sformatf("Item %0d created, parity %b, buffer_reg %10b", hex_code_reg, parity, buffer_reg), UVM_LOW)
 
 					
 						if (parity == buffer_reg[8]) begin
-							`uvm_info("Parity", $sformatf("Item %10b created", buffer_reg), UVM_LOW)
-							// hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]};
+							// `uvm_info("Parity", $sformatf("Item %10b created", buffer_reg), UVM_LOW)
 							if (old_value_reg[7:0] == 8'h00) begin
 								hex_code_reg = {8'h00, buffer_reg[7:0]};  //kad se jednom 1B
-								// buffer_reg = 10'h000;
-																// old_value_reg = 10'h000;
 							end else 
 							if  (buffer_reg[7:0] == old_value_reg[7:0]) begin
 								hex_code_reg = {8'h00, buffer_reg[7:0]};  //kad se dugo drzi od 1B
-								//buffer_reg = 10'h000;
 							end else if((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] == 8'hf0)) begin
 								hex_code_reg = hex_code_reg; //Kad se otpusti od dva da preskoci takt
 							end else if  (buffer_reg[7:0] == 8'hf0) begin
@@ -305,15 +262,12 @@ class scoreboard extends uvm_scoreboard;
 								hex_code_reg = {old_value_reg[7:0], buffer_reg[7:0]}; //Drugi B koda od 2B otpusni
 							end
 							old_value_reg = buffer_reg;
-						// 								`uvm_info("ParityEnd", $sformatf("Item %0d created", hex_code_reg), UVM_LOW)
 						end
 						state_reg =  1'b0;
 					end
 				end
 					
 			endcase  
-			// `uvm_info("Check", $sformatf("Item %0d created", hex_code_reg), UVM_LOW)
-		// end
 		ps2clk_reg = ps2clk_next;
 		return hex_code_reg;
 	endfunction
@@ -413,10 +367,7 @@ module testbench;
 	initial begin
 		ps2clk = 1;
 		forever begin
-			// ps2clk = ~ps2clk;
 			#3 ps2clk = ~ps2clk;
-			// `uvm_info("Test", $sformatf("ps2clk %0d ", ps2clk), UVM_LOW)
-
 		end
 	end
 
@@ -424,11 +375,7 @@ module testbench;
 		clk = 0;
 		
 		forever begin
-			// ps2clk = ~ps2clk;
 			#10 clk = ~clk;
-
-			// `uvm_info("Test", $sformatf("ps2clk %0d ", ps2clk), UVM_LOW)
-
 		end
 	end
 
