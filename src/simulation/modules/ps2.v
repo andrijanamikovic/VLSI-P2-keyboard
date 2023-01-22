@@ -60,7 +60,7 @@ module ps2(
                         cnt_next = 4'b1001;
                         state_next = read;
                         parity = 1'b0;
-                        //hex_code_next = {ps2data, 15'h7fff};
+                        // hex_code_next = {ps2data, 15'h7fff};
                     end else begin
                         state_next = idle;
                         //hex_code_next = {ps2data, 15'h7fff};
@@ -82,6 +82,7 @@ module ps2(
                     if (parity == buffer_next[9]) begin
                         if (old_value_next[7:0] == 8'h00) begin
                             hex_code_next = {8'h00, buffer_next[7:0]};  //kad se jednom pritisne od 1
+                            // buffer_next = 8'h00;
                         end
                         else if (buffer_next[7:0] == old_value_next[7:0]) begin
                             hex_code_next = {8'h00, buffer_next[7:0]};  //kad se dugo drzi od 1B
@@ -96,7 +97,6 @@ module ps2(
                          end else if (old_value_next[7:0] == 8'hf0) begin
                             hex_code_next = {old_value_next[7:0], buffer_next[7:0]}; //Drugi B koda od 2B otpusni
                          end
-                        
                     end
                     state_next = idle;
                 end
