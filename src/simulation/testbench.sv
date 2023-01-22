@@ -38,7 +38,7 @@ class generator extends uvm_sequence;
 		super.new(name);
 	endfunction
 	
-	int num = 200;
+	int num = 2000;
 	
 	virtual task body();
 		for (int i = 0; i < num; i++) begin
@@ -195,10 +195,10 @@ class scoreboard extends uvm_scoreboard;
 	bit [15:0] ps2 = 15'h0000;
 	reg[31:0] count = 32'h00000000;
 	
-	reg [9:0] buffer_reg = 10'h000;;
-	reg [9:0] old_value_reg = 10'd0;;
+	reg [9:0] buffer_reg = 10'h000;
+	reg [9:0] old_value_reg = 10'd0;
 	reg state_reg = 1'b0;
-	reg [3:0] cnt_reg = 4'b1001;;
+	reg [3:0] cnt_reg = 4'b1001;
 	reg ps2clk_reg = 1'b0;
 	reg ps2clk_next;
 	
@@ -209,13 +209,18 @@ class scoreboard extends uvm_scoreboard;
 	reg parity;
 	reg flag = 1'b1;
 
+	bit[15:0] test_cur  = 15'h0000;
+	bit[15:0] test_next = 15'h0000;
+
 	virtual function write(ps2_item item);
+		ps2 = test_cur;
+		test_cur = test_next;
 		if (flag == 1'b0) begin
-			ps2 = checkPS2(ps2, item);
+			test_next = checkPS2(ps2, item);
 		end else begin
 			flag = 1'b0;
 		end
-					// ps2 = checkPS2(ps2, item);
+		// ps2 = checkPS2(ps2, item);
 
 		// if (count == 32'h10) begin
 			//if (ps2 == item.code)
@@ -287,7 +292,7 @@ class scoreboard extends uvm_scoreboard;
 							end else 
 							if  (buffer_reg[7:0] == old_value_reg[7:0]) begin
 								hex_code_reg = {8'h00, buffer_reg[7:0]};  //kad se dugo drzi od 1B
-								buffer_reg = 10'h000;
+								//buffer_reg = 10'h000;
 							end else if((old_value_reg[7:0] == 8'he0) &&  (buffer_reg[7:0] == 8'hf0)) begin
 								hex_code_reg = hex_code_reg; //Kad se otpusti od dva da preskoci takt
 							end else if  (buffer_reg[7:0] == 8'hf0) begin

@@ -74,7 +74,7 @@ module ps2(
                         old_value_next <= buffer_reg;
                         cnt_next = 4'b1001;
                         state_next = read;
-                        parity = 1'b1;
+                        parity = 1'b0;
                     end else state_next = idle;
                 end
             end
@@ -85,23 +85,19 @@ module ps2(
                     cnt_next = cnt_reg - 1;
                 end
                 if (cnt_reg == 4'h0) begin
-                    parity = 1'b1;
                     for (i = 0 ; i < 8; i = i + 1 ) begin
                         parity = parity ^ buffer_next[i];
                     end
                    
-                    if (parity == buffer_next[8]) begin
-                        if (old_value_next[7:0] == 8'h00) begin
-                            hex_code_next = {8'h00, buffer_next[7:0]};  //kad se jednom pritisne od 1
-                        end
-                        else if (buffer_next[7:0] == old_value_next[7:0]) begin
+                    if (parity == buffer_next[9]) begin
+
+                        if (buffer_next[7:0] == old_value_next[7:0]) begin
                             hex_code_next = {8'h00, buffer_next[7:0]};  //kad se dugo drzi od 1B
                         end else if((old_value_next[7:0] == 8'he0) && (buffer_next[7:0] == 8'hf0)) begin
                             hex_code_next = hex_code_reg; //Kad se otpusti od dva da preskoci takt
                         end else if (buffer_next[7:0] == 8'hf0) begin
                             hex_code_next = {buffer_next[7:0], old_value_next[7:0]}; //kad se optusti od 1B
                          end else if (buffer_next[7:0] == 8'he0) begin
-                             hex_code_next = hex_code_reg;
                             // ceka 1 takt kad dodje 1B od koda od 2B
                          end else if ((old_value_next[7:0] == 8'he0) && (buffer_next[7:0] != 8'hf0)) begin
                              hex_code_next = {old_value_next[7:0], buffer_next[7:0]}; //Drugi 2B koda od 2B a nije otpusni

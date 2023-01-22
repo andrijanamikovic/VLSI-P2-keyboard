@@ -1,5 +1,5 @@
 QuestaSim-64 vopt 10.4c Compiler 2015.07 Jul 20 2015
-Start time: 19:43:07 on Jan 22,2023
+Start time: 20:12:42 on Jan 22,2023
 vopt -work work -l ./vlog_compile.log -override_timescale 1 ps / 1 ps "+acc" -o optimized_design ps2 testbench 
 
 Top level modules:
@@ -21,8 +21,8 @@ Optimizing 7 design-units (inlining 0/2 module instances, 0/0 UDP instances):
 -- Optimizing interface ps2_if(fast)
 -- Optimizing package testbench_sv_unit(fast)
 ** Warning: ../src/simulation/testbench.sv(48): (vopt-2240) Treating stand-alone use of function 'randomize' as an implicit VOID cast.
-** Warning: ../src/simulation/testbench.sv(212): (vopt-2250) Function "write" has no return value assignment.
+** Warning: ../src/simulation/testbench.sv(215): (vopt-2250) Function "write" has no return value assignment.
 -- Optimizing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)(fast)
 Optimized design name is optimized_design
-End time: 19:43:09 on Jan 22,2023, Elapsed time: 0:00:02
+End time: 20:12:44 on Jan 22,2023, Elapsed time: 0:00:02
 Errors: 0, Warnings: 4
